@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acutils.pathology &mdash; acutils 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            acutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">acutils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">acutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">acutils.pathology</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for acutils.pathology</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Functions prefixed with &quot;tmnt&quot; are treatments and must have those parameters:</span>
+<span class="c1">#  - src: absolute path to the file that will be processed (str)</span>
+<span class="c1">#  - dstdir: absolute path to the directory that should contain new files (str)</span>
+<span class="c1"># Also, nothing should be returned.</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cv2</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|WRN| You must install &#39;opencv-python&#39; (cv2) to use pathology module. &quot;</span>
+          <span class="s2">&quot;Leaving.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">openslide</span> <span class="kn">import</span> <span class="n">OpenSlide</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|WRN| You must install &#39;openslide-python&#39; to use pathology module. &quot;</span>
+          <span class="s2">&quot;Be careful, it also requires Openslide installation on your computer&quot;</span>
+          <span class="s2">&quot;, the &#39;openslide-python&#39; Python library is just a mapping. Leaving.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|WRN| You must install &#39;Pillow&#39; to use pathology module. &quot;</span>
+          <span class="s2">&quot;Leaving.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+    
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">skimage.io</span> <span class="kn">import</span> <span class="n">imread</span><span class="p">,</span> <span class="n">imsave</span>
+    <span class="kn">from</span> <span class="nn">skimage.data</span> <span class="kn">import</span> <span class="n">skin</span> <span class="k">as</span> <span class="n">skimgskin</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|WRN| You must install &#39;scikit-image&#39; to use pathology module. &quot;</span>
+          <span class="s2">&quot;You might need a skimage optinal dependencie: &#39;pooch&#39;. Leaving.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">gpu</span>
+
+<span class="n">Image</span><span class="o">.</span><span class="n">MAX_IMAGE_PIXELS</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">aunp</span>
+<span class="kn">import</span> <span class="nn">skimage</span> <span class="k">as</span> <span class="nn">auski</span>
+<span class="n">gpu</span><span class="o">.</span><span class="n">set_gpu_computation</span><span class="p">()</span> <span class="c1"># if True import cucim.skimage as auski and cupy as aunp</span>
+
+
+
+<div class="viewcode-block" id="update_ref_image">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.update_ref_image">[docs]</a>
+<span class="k">def</span> <span class="nf">update_ref_image</span><span class="p">(</span><span class="n">img_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Change reference image using when calling harmonize function.</span>
+<span class="sd">    If you called `gpu.set_gpu_computation(activate=True)`, calling will load</span>
+<span class="sd">    the image on the GPU (using cupy instead of numpy).</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) img_path=None:</span>
+<span class="sd">		Absolute path to the image that will be the reference to harmonize.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">global</span> <span class="n">IHC_REF_IMAGE</span><span class="p">,</span> <span class="n">IHC_H_REF</span><span class="p">,</span> <span class="n">IHC_E_REF</span><span class="p">,</span> <span class="n">IHC_D_REF</span>
+    <span class="k">if</span> <span class="n">img_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">IHC_REF_IMAGE</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">IHC_REF_IMAGE</span><span class="p">)</span> <span class="c1"># for switching from CPU to GPU</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">IHC_REF_IMAGE</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">imread</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
+    
+    <span class="n">ihc_hed</span> <span class="o">=</span> <span class="p">(</span><span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">rgb2hed</span><span class="p">(</span><span class="n">IHC_REF_IMAGE</span><span class="p">))</span>
+    <span class="n">null</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">IHC_H_REF</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">hed2rgb</span><span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">),</span> 
+                                               <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">IHC_E_REF</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">hed2rgb</span><span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">null</span><span class="p">,</span> <span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">null</span><span class="p">),</span>
+                                               <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">IHC_D_REF</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">hed2rgb</span><span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]),</span>
+                                               <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span></div>
+
+
+
+
+<span class="n">IHC_REF_IMAGE</span> <span class="o">=</span> <span class="n">skimgskin</span><span class="p">()</span>
+<span class="n">update_ref_image</span><span class="p">()</span> <span class="c1"># default ref image is skimage.data.skin()</span>
+
+
+
+<div class="viewcode-block" id="harmonize">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.harmonize">[docs]</a>
+<span class="k">def</span> <span class="nf">harmonize</span><span class="p">(</span><span class="n">img</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Harmonize the image through hed conversion, erase the color and keep </span>
+<span class="sd">    the stains. Then match the histogram with a reference image.</span>
+<span class="sd">    You can change the reference image calling update_ref_image function.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(numpy.array or cupy.array of int) img:</span>
+<span class="sd">		RGB image to harmonize.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None</span>
+<span class="sd">    </span>
+
+<span class="sd">    REFERENCES</span>
+<span class="sd">    ----------</span>
+<span class="sd">        [1] A. C. Ruifrok and D. A. Johnston:</span>
+<span class="sd">            &quot;Quantification of histochemical staining by color deconvolution.,&quot; </span>
+<span class="sd">            Analytical and quantitative cytology and histology / the International </span>
+<span class="sd">            Academy of Cytology [and] American Society of Cytology, vol. 23, no. 4, </span>
+<span class="sd">            pp. 291-9, Aug. 2001.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">ihc_hed</span> <span class="o">=</span> <span class="p">(</span><span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">rgb2hed</span><span class="p">(</span><span class="n">img</span><span class="p">))</span>
+    <span class="n">null</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">ihc_h</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">hed2rgb</span><span class="p">(</span>
+                    <span class="n">aunp</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">hist_h</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">match_histograms</span><span class="p">(</span><span class="n">ihc_h</span><span class="p">,</span> <span class="n">IHC_H_REF</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">ihc_h</span>
+
+    <span class="n">ihc_e</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">hed2rgb</span><span class="p">(</span>
+                    <span class="n">aunp</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">null</span><span class="p">,</span> <span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">null</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">hist_e</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">match_histograms</span><span class="p">(</span><span class="n">ihc_e</span><span class="p">,</span> <span class="n">IHC_E_REF</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">ihc_e</span>
+
+    <span class="n">ihc_d</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">hed2rgb</span><span class="p">(</span>
+                    <span class="n">aunp</span><span class="o">.</span><span class="n">stack</span><span class="p">((</span><span class="n">null</span><span class="p">,</span> <span class="n">null</span><span class="p">,</span> <span class="n">ihc_hed</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">hist_d</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">exposure</span><span class="o">.</span><span class="n">match_histograms</span><span class="p">(</span><span class="n">ihc_d</span><span class="p">,</span> <span class="n">IHC_D_REF</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">ihc_d</span><span class="p">,</span> <span class="n">ihc_hed</span><span class="p">,</span> <span class="n">null</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">dstack</span><span class="p">((</span><span class="n">hist_h</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">hist_e</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">hist_d</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">])</span>
+                    <span class="p">)</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="tmnt_harmonize">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.tmnt_harmonize">[docs]</a>
+<span class="k">def</span> <span class="nf">tmnt_harmonize</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Read a segment, harmonize it calling harmonize function, then save it.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		Absolute path to the file that will be processed.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) dstdir:</span>
+<span class="sd">		Absolute path to the directory that should contain the new file.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">harmonize</span><span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">imread</span><span class="p">(</span><span class="n">src</span><span class="p">)))</span>
+    <span class="n">imsave</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dstdir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">)),</span> 
+            <span class="n">gpu</span><span class="o">.</span><span class="n">cupy_to_numpy</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="n">check_contrast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="get_preview">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.get_preview">[docs]</a>
+<span class="k">def</span> <span class="nf">get_preview</span><span class="p">(</span><span class="n">slide</span><span class="p">,</span> <span class="n">lvl</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">divider</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Read the slide and returns it with low resolution.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(openslide.OpenSlide) slide:</span>
+<span class="sd">		The slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) lvl=-1:</span>
+<span class="sd">		Level taken.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) divider=None:</span>
+<span class="sd">		Scale the preview by dividing the slide. The new width and height will be </span>
+<span class="sd">            the old ones divided by the divider. It is also the size of the area </span>
+<span class="sd">            used to load the slide, to ensure no memory overload.</span>
+
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(numpy.array or cupy.array of int) preview:</span>
+<span class="sd">		Scaled loaded slide.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">divider</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">preview</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">slide</span><span class="o">.</span><span class="n">get_thumbnail</span><span class="p">(</span>
+                                            <span class="n">slide</span><span class="o">.</span><span class="n">level_dimensions</span><span class="p">[</span><span class="n">lvl</span><span class="p">])))</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">slide</span><span class="o">.</span><span class="n">level_dimensions</span><span class="p">[</span><span class="n">lvl</span><span class="p">]</span>
+        <span class="n">pw</span><span class="p">,</span> <span class="n">ph</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="n">divider</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">divider</span><span class="p">)</span> <span class="c1"># size of the preview</span>
+        <span class="n">tw</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pw</span><span class="o">/</span><span class="n">divider</span><span class="p">),</span>  <span class="nb">int</span><span class="p">(</span><span class="n">ph</span><span class="o">/</span><span class="n">divider</span><span class="p">)</span> <span class="c1"># tile size from the preview</span>
+        <span class="n">preview</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">pw</span><span class="p">,</span> <span class="n">ph</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">aunp</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="o">+</span> <span class="mi">255</span>
+
+        <span class="c1"># Update preview area per area</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">divider</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">divider</span><span class="p">):</span>
+                <span class="n">preview</span><span class="p">[</span><span class="n">j</span><span class="o">*</span><span class="n">th</span><span class="p">:(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">th</span><span class="p">,</span> <span class="n">i</span><span class="o">*</span><span class="n">tw</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">tw</span><span class="p">]</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">slide</span><span class="o">.</span><span class="n">read_region</span><span class="p">((</span><span class="n">i</span><span class="o">*</span><span class="n">pw</span><span class="p">,</span><span class="n">j</span><span class="o">*</span><span class="n">ph</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">pw</span><span class="p">,</span> <span class="n">ph</span><span class="p">)),</span> 
+                            <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)[:,:,:</span><span class="mi">3</span><span class="p">],</span> 
+                        <span class="n">dsize</span><span class="o">=</span><span class="p">(</span><span class="n">tw</span><span class="p">,</span> <span class="n">th</span><span class="p">),</span> 
+                        <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_NEAREST</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+    <span class="k">return</span> <span class="n">preview</span></div>
+
+
+
+
+<div class="viewcode-block" id="get_cleaned_binary">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.get_cleaned_binary">[docs]</a>
+<span class="k">def</span> <span class="nf">get_cleaned_binary</span><span class="p">(</span><span class="n">preview</span><span class="p">,</span> <span class="n">fp_val</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Split foreground (1) and background (0) using mathematic morphology.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(numpy.array of cupy.array of int) preview:</span>
+<span class="sd">		Fully loaded slide with low resolution.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) fpval=16:</span>
+<span class="sd">		Value that is used to creates footprints for segmentation.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) sigma=2:</span>
+<span class="sd">		Value for gaussian filter (applied on the slide before segmentation).</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(numpy.array of cupy.array of bool) bw:</span>
+<span class="sd">		Binary image from the preview.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">bw</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">color</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">preview</span><span class="p">)</span>
+    <span class="n">bw</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">threshold_otsu</span><span class="p">(</span><span class="n">bw</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">auski</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+    <span class="n">bw</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">morphology</span><span class="o">.</span><span class="n">opening</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">auski</span><span class="o">.</span><span class="n">morphology</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">fp_val</span><span class="p">))</span>
+    <span class="n">bw</span> <span class="o">+=</span> <span class="n">auski</span><span class="o">.</span><span class="n">segmentation</span><span class="o">.</span><span class="n">clear_border</span><span class="p">(</span><span class="o">~</span><span class="n">bw</span><span class="p">)</span>
+    <span class="n">bw</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">morphology</span><span class="o">.</span><span class="n">dilation</span><span class="p">(</span><span class="n">bw</span><span class="p">,</span> <span class="n">auski</span><span class="o">.</span><span class="n">morphology</span><span class="o">.</span><span class="n">disk</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fp_val</span><span class="o">*</span><span class="mf">0.25</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">bw</span></div>
+
+
+
+
+<div class="viewcode-block" id="mask_rgb">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.mask_rgb">[docs]</a>
+<span class="k">def</span> <span class="nf">mask_rgb</span><span class="p">(</span><span class="n">rgb</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Mask rgb image with a binary image.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(numpy.array or cupy.array of int) rgb:</span>
+<span class="sd">		RGB image.</span>
+<span class="sd">    </span>
+<span class="sd">	(numpy.array or cupy.array of bool) mask:</span>
+<span class="sd">		Binary image.</span>
+
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(numpy.array or cupy.array of uint8) masked_rgb:</span>
+<span class="sd">		RGB image masked with the binary image.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">mask_rgb</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">mask</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span><span class="mi">3</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mask_rgb</span><span class="o">*</span><span class="n">rgb</span> <span class="o">+</span> <span class="p">(</span><span class="o">~</span><span class="n">mask_rgb</span><span class="o">*</span><span class="mi">255</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="browse_segments">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.browse_segments">[docs]</a>
+<span class="k">def</span> <span class="nf">browse_segments</span><span class="p">(</span><span class="n">slide</span><span class="p">,</span> <span class="n">bw</span><span class="p">,</span> <span class="n">lvl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">required_area</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">do_harmonize</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find slices inside the preview and load it from de slide.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(openslide.OpenSlide) slide:</span>
+<span class="sd">		The slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(numpy.array of cupy.array of bool) bw:</span>
+<span class="sd">		Binary image from the preview.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) lvl=0:</span>
+<span class="sd">		level taken.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) required_area=10000:</span>
+<span class="sd">		Minimum area (pixels) to keep the slice.</span>
+<span class="sd">    </span>
+<span class="sd">	(bool) do_harmonize=False:</span>
+<span class="sd">		Harmonize slices using harmonize function.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(generator of numpy.array of uint8) Segments:</span>
+<span class="sd">		Found slices.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">slide</span><span class="o">.</span><span class="n">level_dimensions</span><span class="p">[</span><span class="n">lvl</span><span class="p">]</span>
+    <span class="n">new_width</span><span class="p">,</span> <span class="n">new_height</span> <span class="o">=</span> <span class="n">bw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">bw</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># for preview</span>
+    <span class="n">xresolution</span> <span class="o">=</span> <span class="n">width</span> <span class="o">/</span> <span class="n">new_width</span>
+    <span class="n">yresolution</span> <span class="o">=</span> <span class="n">height</span> <span class="o">/</span> <span class="n">new_height</span>
+    <span class="k">for</span> <span class="n">region</span> <span class="ow">in</span> <span class="n">auski</span><span class="o">.</span><span class="n">measure</span><span class="o">.</span><span class="n">regionprops</span><span class="p">(</span><span class="n">auski</span><span class="o">.</span><span class="n">measure</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">bw</span><span class="p">)):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">bbox</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">bbox</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">region</span><span class="o">.</span><span class="n">bbox</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span>
+        <span class="k">if</span> <span class="n">w</span><span class="o">*</span><span class="n">h</span> <span class="o">&gt;</span> <span class="n">required_area</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">xresolution</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="o">*</span><span class="n">yresolution</span><span class="p">)</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">xresolution</span><span class="p">)</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">h</span><span class="o">*</span><span class="n">yresolution</span><span class="p">)</span>
+            <span class="n">segment_mask</span> <span class="o">=</span> <span class="n">auski</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">do_harmonize</span><span class="p">:</span>
+                <span class="n">segment</span> <span class="o">=</span> <span class="n">harmonize</span><span class="p">(</span><span class="n">aunp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">slide</span><span class="o">.</span><span class="n">read_region</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">aunp</span><span class="o">.</span><span class="n">uint8</span><span class="p">)[:,:,:</span><span class="mi">3</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">segment</span> <span class="o">=</span> <span class="n">aunp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">slide</span><span class="o">.</span><span class="n">read_region</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">aunp</span><span class="o">.</span><span class="n">uint8</span><span class="p">)[:,:,:</span><span class="mi">3</span><span class="p">])</span>
+            <span class="k">yield</span> <span class="n">gpu</span><span class="o">.</span><span class="n">cupy_to_numpy</span><span class="p">(</span><span class="n">mask_rgb</span><span class="p">(</span><span class="n">rgb</span><span class="o">=</span><span class="n">segment</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">segment_mask</span><span class="p">))</span></div>
+
+
+
+
+<div class="viewcode-block" id="load_slice_preview_and_ext">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.load_slice_preview_and_ext">[docs]</a>
+<span class="k">def</span> <span class="nf">load_slice_preview_and_ext</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lvl</span><span class="p">,</span> <span class="n">divider</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Load slide file and extract a preview of it using get_preview function.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		Absolute path to the slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) lvl:</span>
+<span class="sd">		Slide level taken.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) divider=None:</span>
+<span class="sd">		Scale the preview by dividing the slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) device=None:</span>
+<span class="sd">		Taken GPU.</span>
+
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(openslide.OpenSlide) slide:</span>
+<span class="sd">		The slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(numpy.array of cupy.array of int) preview:</span>
+<span class="sd">		Fully loaded slide with low resolution.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) slide_ext:</span>
+<span class="sd">		Slide extension.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">gpu</span><span class="o">.</span><span class="n">select_device</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+    <span class="n">slide</span> <span class="o">=</span> <span class="n">OpenSlide</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">preview</span> <span class="o">=</span> <span class="n">get_preview</span><span class="p">(</span><span class="n">slide</span><span class="p">,</span> <span class="n">lvl</span><span class="p">,</span> <span class="n">divider</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">slide_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">slide</span><span class="p">,</span> <span class="n">preview</span><span class="p">,</span> <span class="n">slide_ext</span></div>
+
+
+
+
+<div class="viewcode-block" id="tmnt_save_preview_from_slide">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.tmnt_save_preview_from_slide">[docs]</a>
+<span class="k">def</span> <span class="nf">tmnt_save_preview_from_slide</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span><span class="p">,</span> <span class="n">lvl</span><span class="p">,</span> <span class="n">divider</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Load slide preview and save it.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		Absolute path to the slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) dstdir:</span>
+<span class="sd">		Absolute path to the directory where to save the preview.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) lvl:</span>
+<span class="sd">		Slide level taken.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) divider=None:</span>
+<span class="sd">		Scale the preview by dividing the slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) ext=&quot;png&quot;:</span>
+<span class="sd">		Saved preview extension.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) device=None:</span>
+<span class="sd">		Taken GPU.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">preview</span><span class="p">,</span> <span class="n">slide_ext</span> <span class="o">=</span> <span class="n">load_slice_preview_and_ext</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lvl</span><span class="p">,</span> <span class="n">divider</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+    <span class="n">imsave</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dstdir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">slide_ext</span><span class="p">)]</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> 
+                    <span class="n">gpu</span><span class="o">.</span><span class="n">cupy_to_numpy</span><span class="p">(</span><span class="n">preview</span><span class="p">),</span> <span class="n">check_contrast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="tmnt_save_segments_from_slide">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.tmnt_save_segments_from_slide">[docs]</a>
+<span class="k">def</span> <span class="nf">tmnt_save_segments_from_slide</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span><span class="p">,</span> <span class="n">lvlpreview</span><span class="p">,</span> <span class="n">lvlsegment</span><span class="p">,</span> <span class="n">fpval</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> 
+                                  <span class="n">do_harmonize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">divider</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find slices inside the slide and save them.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		Absolute path to the slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) dstdir:</span>
+<span class="sd">		Absolute path to the directory where to save the preview.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) lvlpreview:</span>
+<span class="sd">		Slide level taken for the preview.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) lvlsegment:</span>
+<span class="sd">		Slide level taken for the segment.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) fpval:</span>
+<span class="sd">		Value that is used to creates footprints for segmentation.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) sigma:</span>
+<span class="sd">		Value for gaussian filter (applied on the slide before segmentation).</span>
+<span class="sd">    </span>
+<span class="sd">	(bool) do_harmonize=False:</span>
+<span class="sd">		Harmonize slices using harmonize function.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) divider=None:</span>
+<span class="sd">		Scale the preview by dividing the slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) ext=&quot;png&quot;:</span>
+<span class="sd">		Saved segments extension.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) device=None:</span>
+<span class="sd">		Taken GPU.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">slide</span><span class="p">,</span> <span class="n">preview</span><span class="p">,</span> <span class="n">slide_ext</span> <span class="o">=</span> <span class="n">load_slice_preview_and_ext</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lvlpreview</span><span class="p">,</span> <span class="n">divider</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+    <span class="n">bw</span> <span class="o">=</span> <span class="n">get_cleaned_binary</span><span class="p">(</span><span class="n">preview</span><span class="p">,</span> <span class="n">fpval</span><span class="p">,</span> <span class="n">sigma</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">segment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">browse_segments</span><span class="p">(</span><span class="n">slide</span><span class="p">,</span> <span class="n">bw</span><span class="p">,</span> <span class="n">lvlsegment</span><span class="p">,</span> <span class="n">do_harmonize</span><span class="o">=</span><span class="n">do_harmonize</span><span class="p">)):</span>
+        <span class="n">imsave</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dstdir</span><span class="p">,</span> 
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">slide_ext</span><span class="p">)]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">segment</span><span class="p">,</span>
+                <span class="n">check_contrast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="browse_tiles">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.browse_tiles">[docs]</a>
+<span class="k">def</span> <span class="nf">browse_tiles</span><span class="p">(</span><span class="n">segment</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">blank_tol</span><span class="o">=</span><span class="mf">0.35</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Regulary crop a segment into multiple tiles of same size.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(numpy.array of int) segment:</span>
+<span class="sd">		Slice to tile.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) size=512:</span>
+<span class="sd">		Size of each tile.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) blank_tol=0.35:</span>
+<span class="sd">		Percentage of white pixels tolerated for a tile.</span>
+
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(generator of tuple of int) coordinates:</span>
+<span class="sd">		Tiles coordinates (x,y).</span>
+<span class="sd">    - tiles generator of numpy.array of int): Keeped tiles.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">segment</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">segment</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">blank_size</span> <span class="o">=</span> <span class="n">size</span><span class="o">*</span><span class="n">size</span><span class="o">*</span><span class="n">blank_tol</span> <span class="c1"># number of pixels that can be white</span>
+    
+    <span class="c1"># Center the tiles (if needed)</span>
+    <span class="n">extra_width</span> <span class="o">=</span> <span class="n">width</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="n">size</span><span class="p">)</span><span class="o">*</span><span class="n">size</span>
+    <span class="n">left_nudge</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">extra_width</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">extra_height</span> <span class="o">=</span> <span class="n">height</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span><span class="o">/</span><span class="n">size</span><span class="p">)</span><span class="o">*</span><span class="n">size</span>
+    <span class="n">top_nudge</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">extra_height</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="c1"># Tile the segment, yield if not too many white pixels</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">left_nudge</span><span class="p">,</span> <span class="n">width</span><span class="o">-</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">top_nudge</span><span class="p">,</span> <span class="n">height</span><span class="o">-</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">segment</span><span class="p">[</span><span class="n">y</span><span class="p">:</span><span class="n">y</span><span class="o">+</span><span class="n">size</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">+</span><span class="n">size</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">765</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">blank_size</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">),</span> <span class="n">segment</span><span class="p">[</span><span class="n">y</span><span class="p">:</span><span class="n">y</span><span class="o">+</span><span class="n">size</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">+</span><span class="n">size</span><span class="p">]</span></div>
+
+
+
+
+<div class="viewcode-block" id="tmnt_save_tiles_from_segment">
+<a class="viewcode-back" href="../../acutils.html#acutils.pathology.tmnt_save_tiles_from_segment">[docs]</a>
+<span class="k">def</span> <span class="nf">tmnt_save_tiles_from_segment</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">blank_tol</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Find slices inside the slide and save them.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		Absolute path to the slide.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) dstdir:</span>
+<span class="sd">		Absolute path to the directory where to save the preview.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) size=512:</span>
+<span class="sd">		Size of each tile.</span>
+<span class="sd">    </span>
+<span class="sd">	(float) blank_tol=0.35:</span>
+<span class="sd">		Percentage of white pixels tolerated for a tile.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) ext=&quot;png&quot;:</span>
+<span class="sd">		Saved tiles extension.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">segment</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">imread</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">segment_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="n">tile</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+      <span class="n">browse_tiles</span><span class="p">(</span><span class="n">segment</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">blank_tol</span><span class="o">=</span><span class="n">blank_tol</span><span class="p">)):</span>
+        <span class="n">imsave</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dstdir</span><span class="p">,</span> 
+                  <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">segment_ext</span><span class="p">)]</span><span class="si">}</span><span class="s2">&quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">_x</span><span class="si">{</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_y</span><span class="si">{</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">tile</span><span class="p">,</span> 
+                  <span class="n">check_contrast</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Acuzle.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

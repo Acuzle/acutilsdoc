@@ -1,0 +1,7 @@
+pathology module
+================
+
+.. automodule:: pathology
+   :members:
+   :undoc-members:
+   :show-inheritance:

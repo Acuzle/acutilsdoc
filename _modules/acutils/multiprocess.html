@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acutils.multiprocess &mdash; acutils 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            acutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">acutils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">acutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">acutils.multiprocess</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for acutils.multiprocess</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+
+
+
+<span class="k">def</span> <span class="nf">_process_func_on_multiple_files</span><span class="p">(</span><span class="n">srcs</span><span class="p">,</span> <span class="n">dstdirs</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Call &quot;func&quot; function for each &quot;src&quot;/&quot;dstdir&quot; from &quot;srcs&quot;/&quot;dstdirs&quot;.</span>
+<span class="sd">    &quot;func&quot; needs &quot;src&quot; and &quot;dstdir&quot; params (in acutils, those are prefixed </span>
+<span class="sd">    with &quot;tmnt&quot;).</span>
+<span class="sd">    **kwargs should be addionnal arguments to pass to the &quot;func&quot; function.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(array/list like of str) srcs:</span>
+<span class="sd">		Source file of each process.</span>
+<span class="sd">    </span>
+<span class="sd">	(array/list like of str) dstdirs:</span>
+<span class="sd">		Destination directory of each process.</span>
+<span class="sd">    </span>
+<span class="sd">	(function) func:</span>
+<span class="sd">		Treatment that will be applied on each source file it needs an absolute </span>
+<span class="sd">    path to the source file &quot;src&quot; and absolute absolute path to destination files </span>
+<span class="sd">    directory &quot;dstdir&quot; in acutils, any function prefixed with &quot;tmnt&quot; is usable.</span>
+<span class="sd">    </span>
+<span class="sd">	**kwargs: Arguments to pass to the &quot;func&quot; function.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">srcs</span><span class="p">,</span> <span class="n">dstdirs</span><span class="p">):</span>
+        <span class="n">func</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+
+<div class="viewcode-block" id="run_processes_on_multiple_files">
+<a class="viewcode-back" href="../../acutils.html#acutils.multiprocess.run_processes_on_multiple_files">[docs]</a>
+<span class="k">def</span> <span class="nf">run_processes_on_multiple_files</span><span class="p">(</span><span class="n">packed_srcs</span><span class="p">,</span> <span class="n">packed_dstdirs</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> 
+                                    <span class="n">allowed_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run processes on the maximum amount of allowed CPUs to apply &quot;func&quot; function </span>
+<span class="sd">    to each source file. </span>
+<span class="sd">    &quot;func&quot; needs &quot;src&quot; and &quot;dstdir&quot; params (in acutils, those are prefixed with </span>
+<span class="sd">    &quot;tmnt&quot;).</span>
+<span class="sd">    **kwargs should be addionnal arguments to pass to the &quot;func&quot; function.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(list&lt;list&lt;str&gt;&gt;) packed_srcs:</span>
+<span class="sd">		Source files absolute paths per process.</span>
+<span class="sd">    </span>
+<span class="sd">	(list&lt;list&lt;str&gt;&gt;) packed_dstdirs:</span>
+<span class="sd">		Destination directories absolute paths per process.</span>
+<span class="sd">    </span>
+<span class="sd">	(function) func:</span>
+<span class="sd">		Treatment that will be applied on each source file it needs an absolute </span>
+<span class="sd">            path to the source file &quot;src&quot; and absolute absolute path to destination </span>
+<span class="sd">            files directory &quot;dstdir&quot; in acutils, any function prefixed with &quot;tmnt&quot; </span>
+<span class="sd">            is usable.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) allowed_cpus=1:</span>
+<span class="sd">		Maximum amount of CPUs used to compute.</span>
+<span class="sd">    </span>
+<span class="sd">	**kwargs: Arguments to pass to the &quot;func&quot; function.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">	None    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">allowed_cpus</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">_process_func_on_multiple_files</span><span class="p">)(</span>
+                <span class="n">srcs</span> <span class="o">=</span> <span class="n">srcs</span><span class="p">,</span>
+                <span class="n">dstdirs</span> <span class="o">=</span> <span class="n">dstdirs</span><span class="p">,</span>
+                <span class="n">func</span> <span class="o">=</span> <span class="n">func</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">srcs</span><span class="p">,</span> <span class="n">dstdirs</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">packed_srcs</span><span class="p">,</span> <span class="n">packed_dstdirs</span><span class="p">))</span></div>
+
+
+
+
+<div class="viewcode-block" id="distribute">
+<a class="viewcode-back" href="../../acutils.html#acutils.multiprocess.distribute">[docs]</a>
+<span class="k">def</span> <span class="nf">distribute</span><span class="p">(</span><span class="n">srcs</span><span class="p">,</span> <span class="n">dstdirs</span><span class="p">,</span> <span class="n">allowed_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">871</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Distribute files to process and split them between allowed CPUs.</span>
+<span class="sd">    The distribution is returned as 2 lists of lists of src or dstdir.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(array/list like of str) srcs:</span>
+<span class="sd">		Source files.</span>
+<span class="sd">    </span>
+<span class="sd">	(array/list like of str) dstdirs:</span>
+<span class="sd">		Destination directories.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) allowed_cpus=1:</span>
+<span class="sd">		Maximum amount of CPUs used to compute.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) seed=871:</span>
+<span class="sd">		Seed used to initialize numpy randomizer.</span>
+
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(list&lt;list&lt;str&gt;&gt;) packed_srcs:</span>
+<span class="sd">		Source files absolute paths per process.</span>
+<span class="sd">    </span>
+<span class="sd">	(list&lt;list&lt;str&gt;&gt;) packed_dstdirs:</span>
+<span class="sd">		Destination directories absolute paths per process.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Use numpy arrays to select with indices</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">srcs</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">srcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">srcs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">dstdirs</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">dstdirs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dstdirs</span><span class="p">)</span>
+
+    <span class="c1"># Split srcs and dstdirs between allowed CPUs (to return this as lists)</span>
+    <span class="n">packed_srcs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">packed_dstdirs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">ids</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">srcs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">allowed_cpus</span><span class="p">)):</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ids</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">packed_srcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">srcs</span><span class="p">[</span><span class="n">ids</span><span class="p">])</span>
+          <span class="n">packed_dstdirs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dstdirs</span><span class="p">[</span><span class="n">ids</span><span class="p">])</span>
+      
+    <span class="k">return</span> <span class="n">packed_srcs</span><span class="p">,</span> <span class="n">packed_dstdirs</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Acuzle.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

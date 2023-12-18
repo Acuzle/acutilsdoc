@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acutils.sheet &mdash; acutils 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            acutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">acutils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">acutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">acutils.sheet</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for acutils.sheet</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Functions prefixed with &quot;tmnt&quot; are treatments and must have those parameters:</span>
+<span class="c1">#  - src: absolute path to the file that will be processed (str)</span>
+<span class="c1">#  - dstdir: absolute path to the directory that should contain new files (str)</span>
+<span class="c1"># Also, nothing should be returned.</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+
+
+<span class="c1"># @TODO Maybe update functions using df.isin() for masks.</span>
+<div class="viewcode-block" id="delete_clueless_rows">
+<a class="viewcode-back" href="../../acutils.html#acutils.sheet.delete_clueless_rows">[docs]</a>
+<span class="k">def</span> <span class="nf">delete_clueless_rows</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">clueless_words</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Delete rows of a Pandas DataFrame based on the values in clueless_words.</span>
+<span class="sd">    Delete each row that have any empty cell or any cell that contain a </span>
+<span class="sd">    clueless_word. If columns argument is specified, only those columns </span>
+<span class="sd">    will be concerned.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(pandas.DataFrame) df:</span>
+<span class="sd">		The DataFrame to filter.</span>
+<span class="sd">    </span>
+<span class="sd">	(list&lt;str&gt;) clueless_words=None:</span>
+<span class="sd">		Any cell containing a word of the list is treated as empty.</span>
+<span class="sd">    </span>
+<span class="sd">	(list&lt;str&gt;) columns=None:</span>
+<span class="sd">		Columns considered for the deletion.</span>
+<span class="sd">    </span>
+<span class="sd">	(bool) inplace=False:</span>
+<span class="sd">		If True, the DataFrame will be modified in place, else it is returned.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(pandas.DataFrame) df=None:</span>
+<span class="sd">		Filtered copy of passed df, if inplace==True returns None.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">clueless_words</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">clueless_words</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">if</span> <span class="n">columns</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+
+    <span class="c1"># Create a mask that is True for rows that should be retained</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">clueless_words</span> <span class="ow">and</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># If inplace is True, update the DataFrame in place</span>
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># Otherwise, return a filtered copy of the DataFrame</span>
+        <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span></div>
+
+
+
+
+<span class="c1"># @TODO pd.read_table might be the same function (but better).</span>
+<span class="c1"># https://pandas.pydata.org/docs/reference/api/pandas.read_table.html</span>
+<div class="viewcode-block" id="read_df_from_any_avalaible_extensions">
+<a class="viewcode-back" href="../../acutils.html#acutils.sheet.read_df_from_any_avalaible_extensions">[docs]</a>
+<span class="k">def</span> <span class="nf">read_df_from_any_avalaible_extensions</span><span class="p">(</span><span class="n">sheetpath</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Load a Pandas DataFrame from a file.</span>
+<span class="sd">    Avalaible extensions: csv, txt, xls, xlsx, feather, parquet, </span>
+<span class="sd">    hdf5, sas7bdat, stata, pickle.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) sheetpath:</span>
+<span class="sd">		Absolute path of the file to load.</span>
+
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(pandas.DataFrame) df:</span>
+<span class="sd">		The DataFrame loaded from the file.</span>
+<span class="sd">    </span>
+<span class="sd">    RAISES</span>
+<span class="sd">    ------</span>
+<span class="sd">    (ValueError) err: </span>
+<span class="sd">        If the file extension is not supported.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Determine the file extension</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">sheetpath</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Load the DataFrame using the appropriate reader based on the file extension</span>
+    <span class="k">if</span> <span class="n">file_extension</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;csv&#39;</span><span class="p">,</span> <span class="s1">&#39;txt&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">sheetpath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_extension</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;xls&#39;</span><span class="p">,</span> <span class="s1">&#39;xlsx&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">sheetpath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_extension</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;feather&#39;</span><span class="p">,</span> <span class="s1">&#39;parquet&#39;</span><span class="p">,</span> <span class="s1">&#39;hdf5&#39;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_feather</span><span class="p">(</span><span class="n">sheetpath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s1">&#39;sas7bdat&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sas</span><span class="p">(</span><span class="n">sheetpath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s1">&#39;stata&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_stata</span><span class="p">(</span><span class="n">sheetpath</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s1">&#39;pickle&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_pickle</span><span class="p">(</span><span class="n">sheetpath</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unsupported file extension: </span><span class="si">{</span><span class="n">file_extension</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="add_suffix_to_cells_from_a_column">
+<a class="viewcode-back" href="../../acutils.html#acutils.sheet.add_suffix_to_cells_from_a_column">[docs]</a>
+<span class="k">def</span> <span class="nf">add_suffix_to_cells_from_a_column</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Concatenate a string with the values in certain columns of a Pandas DataFrame.</span>
+<span class="sd">    </span>
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(pandas.DataFrame) df:</span>
+<span class="sd">		The DataFrame to modify.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) suffix:</span>
+<span class="sd">		The string to concatenate with the values in the specified columns.</span>
+<span class="sd">    </span>
+<span class="sd">	(list) columns:</span>
+<span class="sd">		A list of column names to concatenate with the string.</span>
+<span class="sd">    </span>
+<span class="sd">	(bool) inplace=False:</span>
+<span class="sd">		If True, the DataFrame will be modified in place, else it is returned.</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------    </span>
+<span class="sd">	(pandas.DataFrame) df=None:</span>
+<span class="sd">		Modified copy of passed df, if inplace==True returns None.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df_modified</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+            <span class="n">df_modified</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_modified</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">}{</span><span class="n">suffix</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_modified</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Acuzle.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

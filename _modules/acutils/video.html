@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acutils.video &mdash; acutils 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=01f34227"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            acutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">acutils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">acutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">acutils.video</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for acutils.video</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Functions prefixed with &quot;tmnt&quot; are treatments and must have those parameters:</span>
+<span class="c1">#  - src: absolute path to the file that will be processed (str)</span>
+<span class="c1">#  - dstdir: absolute path to the directory that should contain new files (str)</span>
+<span class="c1"># Also, nothing should be returned.</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">cv2</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;|WRN| You must install &#39;opencv-python&#39; (cv2) to use video module. &quot;</span>
+          <span class="s2">&quot;Leaving.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">()</span>
+
+
+
+<div class="viewcode-block" id="browse_frames_for_binary_classification">
+<a class="viewcode-back" href="../../acutils.html#acutils.video.browse_frames_for_binary_classification">[docs]</a>
+<span class="k">def</span> <span class="nf">browse_frames_for_binary_classification</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> <span class="n">extra_down</span><span class="p">,</span> <span class="n">extra_up</span><span class="p">,</span> 
+                                            <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Browse each frame of a video, from &quot;start&quot; to &quot;end&quot;.</span>
+<span class="sd">    Skip from bound-extra_down to bound+extra_up.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		absolute path to the video</span>
+<span class="sd">    </span>
+<span class="sd">	(int) bound:</span>
+<span class="sd">		frame number that switch the status from &quot;before&quot; to &quot;after&quot;</span>
+<span class="sd">    </span>
+<span class="sd">	(int) extra_down:</span>
+<span class="sd">		how many frames to skip before the bound</span>
+<span class="sd">    </span>
+<span class="sd">	(int) extra_up:</span>
+<span class="sd">		how many frames to skip after the bound</span>
+<span class="sd">    </span>
+<span class="sd">	(int) start=0:</span>
+<span class="sd">		frame number to start browsing frames</span>
+<span class="sd">    </span>
+<span class="sd">	(int) end=None:</span>
+<span class="sd">		frame number to end browsing frames (if None, go for the full duration)</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    ------    </span>
+<span class="sd">	(generator of bool) passed:</span>
+<span class="sd">		True from entering inside the skipped range to the end</span>
+<span class="sd">    </span>
+<span class="sd">	(generator of int) count:</span>
+<span class="sd">		frame numbers</span>
+<span class="sd">    </span>
+<span class="sd">	(generator of numpy.array of uint8) frame:</span>
+<span class="sd">		BGR frames of the video    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">srst</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bound</span><span class="o">-</span><span class="n">extra_down</span><span class="p">)</span> <span class="c1"># skipped range start time</span>
+    <span class="n">srse</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">bound</span><span class="o">+</span><span class="n">extra_up</span><span class="p">)</span> <span class="c1"># skipped range end time</span>
+
+    <span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_COUNT</span><span class="p">))</span> <span class="c1"># as frame amount</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="n">end</span> <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">duration</span> <span class="o">&lt;</span> <span class="n">end</span> <span class="k">else</span> <span class="n">duration</span>
+
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># use it to name frames</span>
+    <span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="c1"># load first frame</span>
+
+    <span class="k">while</span> <span class="n">success</span><span class="p">:</span> <span class="c1"># read it frame per frame</span>
+        <span class="n">passed</span> <span class="o">=</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="n">srst</span> <span class="c1"># True if not before the skipped range</span>
+
+        <span class="k">if</span> <span class="n">passed</span><span class="p">:</span> <span class="c1"># skip frames between srst and srse</span>
+            <span class="k">if</span> <span class="n">srse</span> <span class="o">&gt;=</span> <span class="n">duration</span><span class="p">:</span> <span class="k">break</span> <span class="c1"># exit now if no more data</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;</span> <span class="n">srse</span><span class="p">:</span> <span class="c1"># go to the end of the skipped range</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="c1"># load next frame</span>
+                <span class="k">continue</span>
+
+        <span class="k">elif</span> <span class="n">count</span> <span class="o">&lt;=</span> <span class="n">start</span><span class="p">:</span> <span class="c1"># save nothing before start</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="c1"># load next frame</span>
+            <span class="k">continue</span>
+
+        <span class="k">yield</span> <span class="n">passed</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">frame</span>
+        
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">success</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span></div>
+
+
+
+
+<div class="viewcode-block" id="tmnt_extract_frames_for_binary_classification">
+<a class="viewcode-back" href="../../acutils.html#acutils.video.tmnt_extract_frames_for_binary_classification">[docs]</a>
+<span class="k">def</span> <span class="nf">tmnt_extract_frames_for_binary_classification</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> 
+        <span class="n">extra_down</span><span class="p">,</span> <span class="n">extra_up</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">before_name</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">,</span> 
+        <span class="n">after_name</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Extract frames of a video, from &quot;start&quot; to &quot;end&quot;.</span>
+<span class="sd">    Skip from bound-extra_down to bound+extra_up.</span>
+<span class="sd">    Split them into 2 states &quot;before&quot; or &quot;after&quot; the skipped range.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		absolute path to the video </span>
+<span class="sd">    </span>
+<span class="sd">	(str) dstdir:</span>
+<span class="sd">		absolute path to the directory that should contain the frames</span>
+<span class="sd">    </span>
+<span class="sd">	(int) bound:</span>
+<span class="sd">		frame number that switch the status from &quot;before&quot; to &quot;after&quot;</span>
+<span class="sd">    </span>
+<span class="sd">	(int) extra_down:</span>
+<span class="sd">		how many frames to skip before the bound</span>
+<span class="sd">    </span>
+<span class="sd">	(int) extra_up:</span>
+<span class="sd">		how many frames to skip after the bound</span>
+<span class="sd">    </span>
+<span class="sd">	(int) start=0:</span>
+<span class="sd">		frame number to start browsing frames</span>
+<span class="sd">    </span>
+<span class="sd">	(int) end=None:</span>
+<span class="sd">		frame number to end browsing frames (if None, go for the full duration)</span>
+<span class="sd">    </span>
+<span class="sd">	(str) fext=&quot;png&quot;:</span>
+<span class="sd">		frame extension</span>
+<span class="sd">    </span>
+<span class="sd">	(str) before_name=&quot;before&quot;:</span>
+<span class="sd">		name of the subdir inside dstdir to save frames before skip</span>
+<span class="sd">    </span>
+<span class="sd">	(str) after_name=&quot;after&quot;:</span>
+<span class="sd">		name of the subdir inside dstdir to save frames after skip</span>
+<span class="sd">    </span>
+<span class="sd">    RETURNS</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">vext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">vname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">vext</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">passed</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">browse_frames_for_binary_classification</span><span class="p">(</span>
+                              <span class="n">src</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> <span class="n">extra_down</span><span class="p">,</span> <span class="n">extra_up</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dstdir</span><span class="p">,</span> <span class="n">after_name</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="n">before_name</span><span class="p">,</span>
+             <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">vname</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">fext</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="n">frame</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="tmnt_extract_sequences_for_binary_classification">
+<a class="viewcode-back" href="../../acutils.html#acutils.video.tmnt_extract_sequences_for_binary_classification">[docs]</a>
+<span class="k">def</span> <span class="nf">tmnt_extract_sequences_for_binary_classification</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dstdir</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> 
+        <span class="n">extra_down</span><span class="p">,</span> <span class="n">extra_up</span><span class="p">,</span> <span class="n">seqlen</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sext</span><span class="o">=</span><span class="s1">&#39;mp4&#39;</span><span class="p">,</span> 
+        <span class="n">codec</span><span class="o">=</span><span class="s1">&#39;mp4v&#39;</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">before_name</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">,</span> <span class="n">after_name</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Extract sequences of a video, from &quot;start&quot; to &quot;end&quot;.</span>
+<span class="sd">    Skip from bound-extra_down to bound+extra_up.</span>
+<span class="sd">    Split them into 2 states &quot;before&quot; or &quot;after&quot; the skipped range.</span>
+
+<span class="sd">    PARAMETERS</span>
+<span class="sd">    ----------    </span>
+<span class="sd">	(str) src:</span>
+<span class="sd">		absolute path to the video </span>
+<span class="sd">    </span>
+<span class="sd">	(str) dstdir:</span>
+<span class="sd">		Absolute path to the directory that should contain the frames.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) bound:</span>
+<span class="sd">		Frame number that switch the status from &quot;before&quot; to &quot;after&quot;.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) extra_down:</span>
+<span class="sd">		How many frames to skip before the bound.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) extra_up:</span>
+<span class="sd">		How many frames to skip after the bound.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) seqlen=6:</span>
+<span class="sd">		Amount of frames per sequence.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) start=0:</span>
+<span class="sd">		Frame number to start browsing frames.</span>
+<span class="sd">    </span>
+<span class="sd">	(int) end=None:</span>
+<span class="sd">		Frame number to end browsing frames (if None, go for the full duration).</span>
+<span class="sd">    </span>
+<span class="sd">	(str) sext=&quot;mp4&quot;:</span>
+<span class="sd">		Sequence extension.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) codec=&quot;mp4v&quot;:</span>
+<span class="sd">		Sequence codec, used for: fourcc = cv2.VideoWriter_fourcc(*codec).</span>
+<span class="sd">    </span>
+<span class="sd">	(int) fps=12:</span>
+<span class="sd">		saved Sequence frames per second.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) before_name=&quot;before&quot;:</span>
+<span class="sd">		Name of the subdir inside dstdir to save frames before skip.</span>
+<span class="sd">    </span>
+<span class="sd">	(str) after_name=&quot;after&quot;:</span>
+<span class="sd">		Name of the subdir inside dstdir to save frames after skip.    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">_</span><span class="p">,</span> <span class="n">vext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
+    <span class="n">vname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">)[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">vext</span><span class="p">)]</span>
+
+    <span class="n">fourcc</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter_fourcc</span><span class="p">(</span><span class="o">*</span><span class="n">codec</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># for VideoWriter</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">scount</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># sequence counter</span>
+    <span class="n">old_passed</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">for</span> <span class="n">passed</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">browse_frames_for_binary_classification</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> 
+      <span class="n">extra_down</span><span class="p">,</span> <span class="n">extra_up</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">old_passed</span> <span class="o">!=</span> <span class="n">passed</span><span class="p">:</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># a sequence should be entirely before or after the skip</span>
+        
+        <span class="n">seq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="c1"># add the frame to the sequence</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">==</span> <span class="n">seqlen</span><span class="p">:</span> <span class="c1"># write a sequence file if enough frames</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoWriter</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dstdir</span><span class="p">,</span> <span class="n">after_name</span> <span class="k">if</span> <span class="n">passed</span> <span class="k">else</span> <span class="n">before_name</span><span class="p">,</span> 
+                                                  <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">vname</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">scount</span><span class="si">}</span><span class="s1">.</span><span class="si">{</span><span class="n">sext</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">),</span> 
+                <span class="n">fourcc</span><span class="p">,</span> 
+                <span class="n">fps</span><span class="p">,</span> 
+                <span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">][::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">seq</span><span class="p">:</span> 
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+            <span class="n">seq</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">scount</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="n">old_passed</span> <span class="o">=</span> <span class="n">passed</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Acuzle.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

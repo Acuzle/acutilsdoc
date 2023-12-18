@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>multiprocess module &mdash; acutils 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            acutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">acutils</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">acutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">multiprocess module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/multiprocess.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-multiprocess">
+<span id="multiprocess-module"></span><h1>multiprocess module<a class="headerlink" href="#module-multiprocess" title="Link to this heading"></a></h1>
+<section id="multiprocess-better-multiprocessing-and-multithreading-in-python">
+<h2>multiprocess: better multiprocessing and multithreading in python<a class="headerlink" href="#multiprocess-better-multiprocessing-and-multithreading-in-python" title="Link to this heading"></a></h2>
+<section id="about-multiprocess">
+<h3>About Multiprocess<a class="headerlink" href="#about-multiprocess" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> is a fork of <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code>. <code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> extends <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code> to provide enhanced serialization, using <cite>dill</cite>. <code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> leverages <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code> to support the spawning of processes using the API of the python standard library’s <code class="docutils literal notranslate"><span class="pre">threading</span></code> module. <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code> has been distributed as part of the standard library since python 2.6.</p>
+<p><code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> is part of <code class="docutils literal notranslate"><span class="pre">pathos</span></code>,  a python framework for heterogeneous computing.
+<code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> is in active development, so any user feedback, bug reports, comments,
+or suggestions are highly appreciated.  A list of issues is located at <a class="reference external" href="https://github.com/uqfoundation/multiprocess/issues">https://github.com/uqfoundation/multiprocess/issues</a>, with a legacy list maintained at <a class="reference external" href="https://uqfoundation.github.io/project/pathos/query">https://uqfoundation.github.io/project/pathos/query</a>.</p>
+</section>
+<section id="major-features">
+<h3>Major Features<a class="headerlink" href="#major-features" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> enables:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>objects to be transferred between processes using pipes or multi-producer/multi-consumer queues</p></li>
+<li><p>objects to be shared between processes using a server process or (for simple data) shared memory</p></li>
+</ul>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> provides:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>equivalents of all the synchronization primitives in <code class="docutils literal notranslate"><span class="pre">threading</span></code></p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">Pool</span></code> class to facilitate submitting tasks to worker processes</p></li>
+<li><p>enhanced serialization, using <code class="docutils literal notranslate"><span class="pre">dill</span></code></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="current-release">
+<h3>Current Release<a class="headerlink" href="#current-release" title="Link to this heading"></a></h3>
+<p>The latest released version of <code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> is available from:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://pypi.org/project/multiprocess">https://pypi.org/project/multiprocess</a></p>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> is distributed under a 3-clause BSD license, and is a fork of <code class="docutils literal notranslate"><span class="pre">multiprocessing</span></code>.</p>
+</section>
+<section id="development-version">
+<h3>Development Version<a class="headerlink" href="#development-version" title="Link to this heading"></a></h3>
+<p>You can get the latest development version with all the shiny new features at:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/uqfoundation">https://github.com/uqfoundation</a></p>
+</div></blockquote>
+<p>If you have a new contribution, please submit a pull request.</p>
+</section>
+<section id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> can be installed with <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pip install multiprocess
+</pre></div>
+</div>
+<p>For python 2, a C compiler is required to build the included extension module from source. Python 3 and binary installs do not require a C compiler.</p>
+</section>
+<section id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> requires:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">python</span></code> (or <code class="docutils literal notranslate"><span class="pre">pypy</span></code>), <strong>&gt;=3.7</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setuptools</span></code>, <strong>&gt;=42</strong></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dill</span></code>, <strong>&gt;=0.3.6</strong></p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">multiprocess.Process</span></code> class follows the API of <code class="docutils literal notranslate"><span class="pre">threading.Thread</span></code>.
+For example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">multiprocess</span> <span class="kn">import</span> <span class="n">Process</span><span class="p">,</span> <span class="n">Queue</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+    <span class="n">q</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;hello world&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="n">q</span><span class="p">])</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">get</span><span class="p">())</span>
+    <span class="n">p</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Synchronization primitives like locks, semaphores and conditions are
+available, for example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">multiprocess</span> <span class="kn">import</span> <span class="n">Condition</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">&lt;Condition(&lt;RLock(None, 0)&gt;), 0&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">&lt;Condition(&lt;RLock(MainProcess, 1)&gt;), 0&gt;</span>
+</pre></div>
+</div>
+<p>One can also use a manager to create shared objects either in shared
+memory or in a server process, for example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">multiprocess</span> <span class="kn">import</span> <span class="n">Manager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager</span> <span class="o">=</span> <span class="n">Manager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">l</span><span class="p">)</span>
+<span class="go">[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+<span class="go">&lt;Proxy[list] object at 0x00E1B3B0&gt;</span>
+</pre></div>
+</div>
+<p>Tasks can be offloaded to a pool of worker processes in various ways,
+for example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">multiprocess</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span><span class="o">*</span><span class="n">x</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">map_async</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="go">[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</span>
+</pre></div>
+</div>
+<p>When <code class="docutils literal notranslate"><span class="pre">dill</span></code> is installed, serialization is extended to most objects,
+for example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">multiprocess</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span><span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span><span class="p">,</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)))</span>
+<span class="go">[0, 2, 6, 12, 20, 30, 42, 56, 72, 90]</span>
+</pre></div>
+</div>
+</section>
+<section id="more-information">
+<h3>More Information<a class="headerlink" href="#more-information" title="Link to this heading"></a></h3>
+<p>Probably the best way to get started is to look at the documentation at
+<a class="reference external" href="http://multiprocess.rtfd.io">http://multiprocess.rtfd.io</a>. See <code class="docutils literal notranslate"><span class="pre">multiprocess.examples</span></code> for a set of example
+scripts. You can also run the test suite with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">multiprocess.tests</span></code>.
+Please feel free to submit a ticket on github, or ask a question on
+stackoverflow (<strong>&#64;Mike McKerns</strong>).  If you would like to share how you use
+<code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> in your work, please send an email (to <strong>mmckerns at uqfoundation dot org</strong>).</p>
+</section>
+<section id="citation">
+<h3>Citation<a class="headerlink" href="#citation" title="Link to this heading"></a></h3>
+<p>If you use <code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> to do research that leads to publication, we ask that you
+acknowledge use of <code class="docutils literal notranslate"><span class="pre">multiprocess</span></code> by citing the following in your publication:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">M</span><span class="o">.</span><span class="n">M</span><span class="o">.</span> <span class="n">McKerns</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span> <span class="n">Strand</span><span class="p">,</span> <span class="n">T</span><span class="o">.</span> <span class="n">Sullivan</span><span class="p">,</span> <span class="n">A</span><span class="o">.</span> <span class="n">Fang</span><span class="p">,</span> <span class="n">M</span><span class="o">.</span><span class="n">A</span><span class="o">.</span><span class="n">G</span><span class="o">.</span> <span class="n">Aivazis</span><span class="p">,</span>
+<span class="s2">&quot;Building a framework for predictive science&quot;</span><span class="p">,</span> <span class="n">Proceedings</span> <span class="n">of</span>
+<span class="n">the</span> <span class="mi">10</span><span class="n">th</span> <span class="n">Python</span> <span class="ow">in</span> <span class="n">Science</span> <span class="n">Conference</span><span class="p">,</span> <span class="mi">2011</span><span class="p">;</span>
+<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">arxiv</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">pdf</span><span class="o">/</span><span class="mf">1202.1056</span>
+
+<span class="n">Michael</span> <span class="n">McKerns</span> <span class="ow">and</span> <span class="n">Michael</span> <span class="n">Aivazis</span><span class="p">,</span>
+<span class="s2">&quot;pathos: a framework for heterogeneous computing&quot;</span><span class="p">,</span> <span class="mi">2010</span><span class="o">-</span> <span class="p">;</span>
+<span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">uqfoundation</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">project</span><span class="o">/</span><span class="n">pathos</span>
+</pre></div>
+</div>
+<p>Please see <a class="reference external" href="https://uqfoundation.github.io/project/pathos">https://uqfoundation.github.io/project/pathos</a> or
+<a class="reference external" href="http://arxiv.org/pdf/1202.1056">http://arxiv.org/pdf/1202.1056</a> for further information.</p>
+</section>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Array">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typecode_or_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_or_initializer</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Array" title="Link to this definition"></a></dt>
+<dd><p>Returns a synchronized shared array</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="multiprocess.AuthenticationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">AuthenticationError</span></span><a class="reference internal" href="_modules/multiprocess/context.html#AuthenticationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.AuthenticationError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#multiprocess.ProcessError" title="multiprocess.context.ProcessError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessError</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Barrier">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Barrier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parties</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Barrier" title="Link to this definition"></a></dt>
+<dd><p>Returns a barrier object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.BoundedSemaphore">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">BoundedSemaphore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.BoundedSemaphore" title="Link to this definition"></a></dt>
+<dd><p>Returns a bounded semaphore object</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="multiprocess.BufferTooShort">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">BufferTooShort</span></span><a class="reference internal" href="_modules/multiprocess/context.html#BufferTooShort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.BufferTooShort" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#multiprocess.ProcessError" title="multiprocess.context.ProcessError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessError</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Condition">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Condition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Condition" title="Link to this definition"></a></dt>
+<dd><p>Returns a condition object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Event">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Event</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Event" title="Link to this definition"></a></dt>
+<dd><p>Returns an event object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.JoinableQueue">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">JoinableQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.JoinableQueue" title="Link to this definition"></a></dt>
+<dd><p>Returns a queue object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Lock">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Lock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Lock" title="Link to this definition"></a></dt>
+<dd><p>Returns a non-recursive lock object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Manager">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Manager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Manager" title="Link to this definition"></a></dt>
+<dd><p>Returns a manager associated with a running server process</p>
+<p>The managers methods such as <cite>Lock()</cite>, <cite>Condition()</cite> and <cite>Queue()</cite>
+can be used to create shared objects.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Pipe">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Pipe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duplex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Pipe" title="Link to this definition"></a></dt>
+<dd><p>Returns two connection object connected by a pipe</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Pool">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtasksperchild</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Pool" title="Link to this definition"></a></dt>
+<dd><p>Returns a process pool object</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="multiprocess.Process">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daemon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/multiprocess/context.html#Process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.Process" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseProcess</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="multiprocess.ProcessError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">ProcessError</span></span><a class="reference internal" href="_modules/multiprocess/context.html#ProcessError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.ProcessError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Queue">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Queue" title="Link to this definition"></a></dt>
+<dd><p>Returns a queue object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.RLock">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">RLock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.RLock" title="Link to this definition"></a></dt>
+<dd><p>Returns a recursive lock object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.RawArray">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">RawArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typecode_or_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_or_initializer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.RawArray" title="Link to this definition"></a></dt>
+<dd><p>Returns a shared array</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.RawValue">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">RawValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typecode_or_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.RawValue" title="Link to this definition"></a></dt>
+<dd><p>Returns a shared object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Semaphore">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Semaphore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Semaphore" title="Link to this definition"></a></dt>
+<dd><p>Returns a semaphore object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.SimpleQueue">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">SimpleQueue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.SimpleQueue" title="Link to this definition"></a></dt>
+<dd><p>Returns a queue object</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="multiprocess.TimeoutError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">TimeoutError</span></span><a class="reference internal" href="_modules/multiprocess/context.html#TimeoutError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.TimeoutError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#multiprocess.ProcessError" title="multiprocess.context.ProcessError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessError</span></code></a></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.Value">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">Value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">typecode_or_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lock</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.Value" title="Link to this definition"></a></dt>
+<dd><p>Returns a synchronized shared object</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.active_children">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">active_children</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/multiprocess/process.html#active_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.active_children" title="Link to this definition"></a></dt>
+<dd><p>Return list of process objects corresponding to live child processes</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.allow_connection_pickling">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">allow_connection_pickling</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.allow_connection_pickling" title="Link to this definition"></a></dt>
+<dd><p>Install support for sending connections and sockets
+between processes</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.cpu_count">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">cpu_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.cpu_count" title="Link to this definition"></a></dt>
+<dd><p>Returns the number of CPUs in the system</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.current_process">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">current_process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/multiprocess/process.html#current_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.current_process" title="Link to this definition"></a></dt>
+<dd><p>Return process object representing the current process</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.freeze_support">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">freeze_support</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.freeze_support" title="Link to this definition"></a></dt>
+<dd><p>Check whether this is a fake forked process in a frozen executable.
+If so then run code specified by commandline and exit.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.get_all_start_methods">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">get_all_start_methods</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.get_all_start_methods" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.get_context">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">get_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.get_context" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.get_logger">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">get_logger</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.get_logger" title="Link to this definition"></a></dt>
+<dd><p>Return package logger – if it does not already exist then
+it is created.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.get_start_method">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">get_start_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">allow_none</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.get_start_method" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.log_to_stderr">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">log_to_stderr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.log_to_stderr" title="Link to this definition"></a></dt>
+<dd><p>Turn on logging and add a handler which prints to stderr</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.parent_process">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">parent_process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/multiprocess/process.html#parent_process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#multiprocess.parent_process" title="Link to this definition"></a></dt>
+<dd><p>Return process object representing the parent process</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.set_executable">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">set_executable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">executable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.set_executable" title="Link to this definition"></a></dt>
+<dd><p>Sets the path to a python.exe or pythonw.exe binary used to run
+child processes instead of sys.executable when using the ‘spawn’
+start method.  Useful for people embedding Python.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.set_forkserver_preload">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">set_forkserver_preload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.set_forkserver_preload" title="Link to this definition"></a></dt>
+<dd><p>Set list of module names to try to load in forkserver process.
+This is really just a hint.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="multiprocess.set_start_method">
+<span class="sig-prename descclassname"><span class="pre">multiprocess.</span></span><span class="sig-name descname"><span class="pre">set_start_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#multiprocess.set_start_method" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Acuzle.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

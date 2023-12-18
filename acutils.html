@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acutils package &mdash; acutils 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=01f34227"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="acutils" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            acutils
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">acutils</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">acutils package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.file">acutils.file module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.copyfile"><code class="docutils literal notranslate"><span class="pre">copyfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.copyfile_with_safety"><code class="docutils literal notranslate"><span class="pre">copyfile_with_safety()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.copyfiles_to_dir"><code class="docutils literal notranslate"><span class="pre">copyfiles_to_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.load_dict_from_json"><code class="docutils literal notranslate"><span class="pre">load_dict_from_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.reset_directory"><code class="docutils literal notranslate"><span class="pre">reset_directory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.save_dict_as_json"><code class="docutils literal notranslate"><span class="pre">save_dict_as_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.tmnt_copyfile_to_dir"><code class="docutils literal notranslate"><span class="pre">tmnt_copyfile_to_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.file.tmnt_generate_documentation"><code class="docutils literal notranslate"><span class="pre">tmnt_generate_documentation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.gpu">acutils.gpu module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.gpu.cupy_to_numpy"><code class="docutils literal notranslate"><span class="pre">cupy_to_numpy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.gpu.select_device"><code class="docutils literal notranslate"><span class="pre">select_device()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.gpu.set_gpu_computation"><code class="docutils literal notranslate"><span class="pre">set_gpu_computation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.handler">acutils.handler module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.handler.DataHandler"><code class="docutils literal notranslate"><span class="pre">DataHandler</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.image">acutils.image module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.image.tmnt_resize_file"><code class="docutils literal notranslate"><span class="pre">tmnt_resize_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.multiprocess">acutils.multiprocess module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.multiprocess.distribute"><code class="docutils literal notranslate"><span class="pre">distribute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.multiprocess.run_processes_on_multiple_files"><code class="docutils literal notranslate"><span class="pre">run_processes_on_multiple_files()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.pathology">acutils.pathology module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.browse_segments"><code class="docutils literal notranslate"><span class="pre">browse_segments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.browse_tiles"><code class="docutils literal notranslate"><span class="pre">browse_tiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.get_cleaned_binary"><code class="docutils literal notranslate"><span class="pre">get_cleaned_binary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.get_preview"><code class="docutils literal notranslate"><span class="pre">get_preview()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.harmonize"><code class="docutils literal notranslate"><span class="pre">harmonize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.load_slice_preview_and_ext"><code class="docutils literal notranslate"><span class="pre">load_slice_preview_and_ext()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.mask_rgb"><code class="docutils literal notranslate"><span class="pre">mask_rgb()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.tmnt_harmonize"><code class="docutils literal notranslate"><span class="pre">tmnt_harmonize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.tmnt_save_preview_from_slide"><code class="docutils literal notranslate"><span class="pre">tmnt_save_preview_from_slide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.tmnt_save_segments_from_slide"><code class="docutils literal notranslate"><span class="pre">tmnt_save_segments_from_slide()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.tmnt_save_tiles_from_segment"><code class="docutils literal notranslate"><span class="pre">tmnt_save_tiles_from_segment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.pathology.update_ref_image"><code class="docutils literal notranslate"><span class="pre">update_ref_image()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.sheet">acutils.sheet module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.sheet.add_suffix_to_cells_from_a_column"><code class="docutils literal notranslate"><span class="pre">add_suffix_to_cells_from_a_column()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.sheet.delete_clueless_rows"><code class="docutils literal notranslate"><span class="pre">delete_clueless_rows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.sheet.read_df_from_any_avalaible_extensions"><code class="docutils literal notranslate"><span class="pre">read_df_from_any_avalaible_extensions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils.video">acutils.video module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.video.browse_frames_for_binary_classification"><code class="docutils literal notranslate"><span class="pre">browse_frames_for_binary_classification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.video.tmnt_extract_frames_for_binary_classification"><code class="docutils literal notranslate"><span class="pre">tmnt_extract_frames_for_binary_classification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acutils.video.tmnt_extract_sequences_for_binary_classification"><code class="docutils literal notranslate"><span class="pre">tmnt_extract_sequences_for_binary_classification()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-acutils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">acutils</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">acutils</a></li>
+      <li class="breadcrumb-item active">acutils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/acutils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="acutils-package">
+<h1>acutils package<a class="headerlink" href="#acutils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-acutils.file">
+<span id="acutils-file-module"></span><h2>acutils.file module<a class="headerlink" href="#module-acutils.file" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.copyfile">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">copyfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#copyfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.copyfile" title="Link to this definition"></a></dt>
+<dd><p>Copy a file from src to dst without checking anything.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the file that will be copied.</p></li>
+<li><p><strong>dst</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the future copied file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.copyfile_with_safety">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">copyfile_with_safety</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#copyfile_with_safety"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.copyfile_with_safety" title="Link to this definition"></a></dt>
+<dd><p>Copy a file from src to dst and check if src file and dst directory are existing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the file that will be copied.</p></li>
+<li><p><strong>dst</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the future copied file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.copyfiles_to_dir">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">copyfiles_to_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newfilename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safecopy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#copyfiles_to_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.copyfiles_to_dir" title="Link to this definition"></a></dt>
+<dd><p>Copy multiple files from srcs to a dst directory using “copyfile_to_dir” function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>srcs</strong> (<em>(</em><em>iterable</em><em> of </em><em>str</em><em>)</em>) – absolute paths to the files that will be copied.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the directory that should contain the copy.</p></li>
+<li><p><strong>newfilename=None</strong> (<em>(</em><em>str</em><em>)</em>) – filename expected, if None src filename is used.</p></li>
+<li><p><strong>safecopy=True</strong> (<em>(</em><em>bool</em><em>)</em>) – if True copyfile_with_safety is called, else copyfile is called.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.load_dict_from_json">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">load_dict_from_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#load_dict_from_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.load_dict_from_json" title="Link to this definition"></a></dt>
+<dd><p>Load a dictionary from a json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the json file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>loaded data dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(dict&lt;str;str&gt;) data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.reset_directory">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">reset_directory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#reset_directory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.reset_directory" title="Link to this definition"></a></dt>
+<dd><p>Delete directory if it exists, then create it again and fill it with
+empty subdirecories named from subs argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dirpath</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the directory to reset.</p></li>
+<li><p><strong>subs</strong> (<em>(</em><em>list&lt;str&gt;</em><em>)</em>) – name of the subdirectories that should be in dirpath.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.save_dict_as_json">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">save_dict_as_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#save_dict_as_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.save_dict_as_json" title="Link to this definition"></a></dt>
+<dd><p>Save a dictionary as a json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dst</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the new json file.</p></li>
+<li><p><strong>data</strong> (<em>(</em><em>dict&lt;str;str&gt;</em><em>)</em>) – data dictionary to save.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.tmnt_copyfile_to_dir">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">tmnt_copyfile_to_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newfilename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safecopy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#tmnt_copyfile_to_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.tmnt_copyfile_to_dir" title="Link to this definition"></a></dt>
+<dd><p>Copy a file from src to a dst directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the file that will be copied.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the directory that should contain the copy.</p></li>
+<li><p><strong>newfilename=None</strong> (<em>(</em><em>str</em><em>)</em>) – filename expected, if None src filename is used.</p></li>
+<li><p><strong>safecopy=True</strong> (<em>(</em><em>bool</em><em>)</em>) – if True copyfile_with_safety is called, else copyfile is called.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.file.tmnt_generate_documentation">
+<span class="sig-prename descclassname"><span class="pre">acutils.file.</span></span><span class="sig-name descname"><span class="pre">tmnt_generate_documentation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/file.html#tmnt_generate_documentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.file.tmnt_generate_documentation" title="Link to this definition"></a></dt>
+<dd><p>Extract documentation inside python file and fill it into markdown file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the python file.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the new markdown file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-acutils.gpu">
+<span id="acutils-gpu-module"></span><h2>acutils.gpu module<a class="headerlink" href="#module-acutils.gpu" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.gpu.cupy_to_numpy">
+<span class="sig-prename descclassname"><span class="pre">acutils.gpu.</span></span><span class="sig-name descname"><span class="pre">cupy_to_numpy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/gpu.html#cupy_to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.gpu.cupy_to_numpy" title="Link to this definition"></a></dt>
+<dd><p>Return a numpy.array from a cupy.array or a numpy.array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arr</strong> (<em>(</em><em>numpy.array</em><em> or </em><em>cupy.array</em><em>)</em>) – array to convert as numpy one</p>
+</dd>
+</dl>
+<p>(if not already).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>converted array.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(numpy.array) convarr</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.gpu.select_device">
+<span class="sig-prename descclassname"><span class="pre">acutils.gpu.</span></span><span class="sig-name descname"><span class="pre">select_device</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">device</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/gpu.html#select_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.gpu.select_device" title="Link to this definition"></a></dt>
+<dd><p>Select device used for some GPU computations of the current process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>device</strong> (<em>(</em><em>int</em><em> or </em><em>None</em><em>)</em>) – selected GPU (if None, does nothing).</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.gpu.set_gpu_computation">
+<span class="sig-prename descclassname"><span class="pre">acutils.gpu.</span></span><span class="sig-name descname"><span class="pre">set_gpu_computation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">activate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/gpu.html#set_gpu_computation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.gpu.set_gpu_computation" title="Link to this definition"></a></dt>
+<dd><p>Enable or disable GPU computation. To enable it, cupy and cucim modules
+are needed, it changes import as auski and aunp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>activate=False</strong> (<em>(</em><em>bool</em><em>)</em>) – activate or not GPU computation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-acutils.handler">
+<span id="acutils-handler-module"></span><h2>acutils.handler module<a class="headerlink" href="#module-acutils.handler" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">acutils.handler.</span></span><span class="sig-name descname"><span class="pre">DataHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datapath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_extensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_cpus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">871</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_ndarray_dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'U256'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Main class to handle data on disk.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(str)</span> <span class="pre">datapath</span></span></dt>
+<dd><p>Absolute path to the directory that contain source files.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(array/list</span> <span class="pre">like</span> <span class="pre">of</span> <span class="pre">str)</span> <span class="pre">file_extensions=None</span></span></dt>
+<dd><p>Source file allowed extensions.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(int)</span> <span class="pre">allowed_cpus=1</span></span></dt>
+<dd><p>Maximum amount of CPUs used to compute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(int)</span> <span class="pre">seed=871</span></span></dt>
+<dd><p>Seed used to initialize numpy randomizer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(str)</span> <span class="pre">str_ndarray_dtype=&quot;U256&quot;</span></span></dt>
+<dd><dl class="simple">
+<dt>Data type used for any string numpy arrays. It defines the maximum</dt><dd><p>length of strings, especially those in sheet files, for loading
+labels and groups.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(numpy.array&lt;str_ndarray_dtype&gt;)</span> <span class="pre">files=None</span></span></dt>
+<dd><p>The filenames (with extension) of the files to load.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(numpy.array&lt;str_ndarray_dtype&gt;)</span> <span class="pre">labels=None</span></span></dt>
+<dd><p>The labels of the files.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(numpy.array&lt;str_ndarray_dtype&gt;)</span> <span class="pre">unique_labels=None</span></span></dt>
+<dd><p>The unique labels among the labels.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">(numpy.array&lt;str_ndarray_dtype&gt;)</span> <span class="pre">groups=None</span></span></dt>
+<dd><p>The groups of the files, all with the same will be in the same dataset split.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.balance_datasets">
+<span class="sig-name descname"><span class="pre">balance_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdata</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.balance_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.balance_datasets" title="Link to this definition"></a></dt>
+<dd><p>Balance datasets so the amount of data is equal for each label.
+This is basically calling “_balance_dataset” method with tdata then vdata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tdata</strong> (<em>(</em><em>dict&lt;str;str&gt;</em><em>)</em>) – Train dictionary with filename as key and label as value.</p></li>
+<li><p><strong>vdata</strong> (<em>(</em><em>dict&lt;str;str&gt;</em><em>)</em>) – Val dictionary with filename as key and label as value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(dict&lt;str;str&gt;) balanced_tdata</em> – Train data without superfluous files to balance it.</p></li>
+<li><p><em>(dict&lt;str;str&gt;) balanced_vdata</em> – Val data without superfluous files to balance it.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.load_data_fromdatapath">
+<span class="sig-name descname"><span class="pre">load_data_fromdatapath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.load_data_fromdatapath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.load_data_fromdatapath" title="Link to this definition"></a></dt>
+<dd><p>Load data files from data directory.
+Assuming that those files are directly inside the data directory.
+The filenames are stored as “files” attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.load_groups_fromsheet">
+<span class="sig-name descname"><span class="pre">load_groups_fromsheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sheetpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idcol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupcol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clueless_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">require_full_filename_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.load_groups_fromsheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.load_groups_fromsheet" title="Link to this definition"></a></dt>
+<dd><p>Load data groups from a sheet file.
+You must load files before calling this, you might call
+“load_data_fromdatapath”. The groups are stored as “groups” attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheetpath</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the sheet which contain information about data.</p></li>
+<li><p><strong>idcol=None</strong> (<em>(</em><em>str</em><em>)</em>) – Name of the column that contains at least a part of the filename.</p></li>
+<li><p><strong>groupcol=None</strong> (<em>(</em><em>str</em><em>)</em>) – Name of the column that contains groups, not used here.</p></li>
+<li><p><strong>clueless_words=None</strong> (<em>(</em><em>array/list like</em><em> of </em><em>str</em><em>)</em>) – Strings considered as None.</p></li>
+<li><p><strong>require_full_filename_match=False</strong> (<em>(</em><em>bool</em><em>)</em>) – <p>If True, requires the value in the idcol to be exactly the filename,</p>
+<p>otherwise, if the value in the idcol is included in the filename,
+it is considered as a match. Note that if the idcol value is
+included in multiple filenames, it will be associated with the
+first one found, in descending length order.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.load_labeled_data_fromdatapath">
+<span class="sig-name descname"><span class="pre">load_labeled_data_fromdatapath</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.load_labeled_data_fromdatapath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.load_labeled_data_fromdatapath" title="Link to this definition"></a></dt>
+<dd><p>Load data files and labels from data directory.
+Assuming that those files are inside subdirectories (named with unique
+labels). The filenames are stored as “files” attribute. The labels are
+stored as “labels” attribute and their unique values are stored as
+“unique_labels” attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>None</strong> – </p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.load_labels_fromsheet">
+<span class="sig-name descname"><span class="pre">load_labels_fromsheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sheetpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idcol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelcol</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">othercols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clueless_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_unlabeled_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">require_full_filename_match</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.load_labels_fromsheet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.load_labels_fromsheet" title="Link to this definition"></a></dt>
+<dd><p>Load data labels from a sheet file.
+You must load files before calling this, you might call
+“load_data_fromdatapath”. The labels are stored as “labels” attribute
+and their unique values are stored as “unique_labels” attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sheetpath</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the sheet which contain information about data.</p></li>
+<li><p><strong>idcol=None</strong> (<em>(</em><em>str</em><em>)</em>) – Name of the column that contains at least a part of the filename.</p></li>
+<li><p><strong>labelcol=None</strong> (<em>(</em><em>str</em><em>)</em>) – Name of the column that contains labels, not used here.</p></li>
+<li><p><strong>othercols=None</strong> (<em>(</em><em>array/list like</em><em> of </em><em>str</em><em>)</em>) – Name of the other columns to keep.</p></li>
+<li><p><strong>clueless_words=None</strong> (<em>(</em><em>array/list like</em><em> of </em><em>str</em><em>)</em>) – Strings considered as None.</p></li>
+<li><p><strong>delete_unlabeled_files=True</strong> (<em>(</em><em>bool</em><em>)</em>) – If True, delete each file without label.</p></li>
+<li><p><strong>require_full_filename_match=False</strong> (<em>(</em><em>bool</em><em>)</em>) – <p>If True, requires the value in the idcol to be exactly the filename,</p>
+<p>otherwise, if the value in the idcol is included in the filename,
+it is considered as a match. Note that if the idcol value is
+included in multiple filenames, it will be associated with the
+first one found, in descending length order.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.load_split">
+<span class="sig-name descname"><span class="pre">load_split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.load_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.load_split" title="Link to this definition"></a></dt>
+<dd><p>Load a dictionary from a json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the json file.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>loaded data dictionary.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(dict&lt;str;str&gt;) data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.make_datasets">
+<span class="sig-name descname"><span class="pre">make_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">trainpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.make_datasets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.make_datasets" title="Link to this definition"></a></dt>
+<dd><p>Run processes on the maximum amount of allowed CPUs to apply “func”
+function to each source file.
+“func” needs “src” and “dstdir” params (in acutils, those are prefixed with “tmnt”).
+<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs should be addionnal arguments to pass to the “func” function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>trainpath</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the destination files train directory.</p></li>
+<li><p><strong>valpath</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the destination files val directory.</p></li>
+<li><p><strong>tdata</strong> (<em>(</em><em>dict&lt;str;str&gt;</em><em>)</em>) – Train dictionary with filename as key and label as value.</p></li>
+<li><p><strong>vdata</strong> (<em>(</em><em>dict&lt;str;str&gt;</em><em>)</em>) – Val dictionary with filename as key and label as value.</p></li>
+<li><p><strong>func=None</strong> (<em>(</em><em>function</em><em>)</em>) – <p>Treatment that will be applied on each source file it needs an
+absolute path to the source file “src” and absolute path to
+destination files directory “dstdir”. In acutils, any
+function prefixed with “tmnt” is usable.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>(bool) empty_dir=True:</dt><dd><p>If True, reset destination directories and fill it with unique labels</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>as subdirectories if defined.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt><a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs:</dt><dd><p>Arguments to pass to the “func” function.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dirpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.process" title="Link to this definition"></a></dt>
+<dd><p>Run processes on the maximum amount of allowed CPUs to apply “func”
+function to each source file. If “func” is None, just copy the file.
+“func” needs “src” and “dstdir” params (in acutils, those are
+prefixed with “tmnt”).
+<a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs should be addionnal arguments to pass to the “func” function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dirpath</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to treated files directory.</p></li>
+<li><p><strong>func=None</strong> (<em>(</em><em>function</em><em>)</em>) – <p>Treatment that will be applied on each source file it needs an
+absolute path to the source file “src” and absolute path to
+destination files directory “dstdir”. In acutils, any
+function prefixed with “tmnt” is usable.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>(bool) empty_dir=True:</dt><dd><p>If True, reset destination directory and fill it with unique labels</p>
+</dd>
+</dl>
+<p>as subdirectories if defined</p>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt><a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs:</dt><dd><p>Arguments to pass to the “func” function.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.save_split">
+<span class="sig-name descname"><span class="pre">save_split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.save_split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.save_split" title="Link to this definition"></a></dt>
+<dd><p>Save a split (from “split” method) as a json file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dst</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the new json file.</p></li>
+<li><p><strong>data</strong> (<em>(</em><em>dict&lt;str;str&gt;</em><em>)</em>) – data dictionary to save.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="acutils.handler.DataHandler.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_percentage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">balance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/handler.html#DataHandler.split"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.handler.DataHandler.split" title="Link to this definition"></a></dt>
+<dd><p>Split labeled data into train and test datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_percentage=0.7</strong> (<em>(</em><em>float</em><em>)</em>) – Percentage of data expected in train dataset.</p></li>
+<li><p><strong>balance=False</strong> (<em>(</em><em>bool</em><em>)</em>) – Do call “balance_datasets” method before returning dictionaries.</p></li>
+<li><p><strong>ignore_groups=False</strong> (<em>(</em><em>bool</em><em>)</em>) – If True, ignore groups for the split, even though it is defined.
+If the “groups” attribute is not define, then it is ignored anyway.
+If it is defined and “ignore_groups” is False, then the split is done
+calling “_split_using_groups” method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(dict&lt;str;str&gt;) tdata</em> – train dictionary with filename as key and label as value.</p></li>
+<li><p><em>(dict&lt;str;str&gt;) vdata</em> – val dictionary with filename as key and label as value.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-acutils.image">
+<span id="acutils-image-module"></span><h2>acutils.image module<a class="headerlink" href="#module-acutils.image" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.image.tmnt_resize_file">
+<span class="sig-prename descclassname"><span class="pre">acutils.image.</span></span><span class="sig-name descname"><span class="pre">tmnt_resize_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">224</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">224</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/image.html#tmnt_resize_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.image.tmnt_resize_file" title="Link to this definition"></a></dt>
+<dd><p>Load image file from src, resize, then save it into dstdir.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the file that will be processed.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the directory that should contain new files.</p></li>
+<li><p><strong>new_width=224</strong> (<em>(</em><em>int</em><em>)</em>) – Expected width resize.</p></li>
+<li><p><strong>new_height=224</strong> (<em>(</em><em>int</em><em>)</em>) – Expected height resize.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-acutils.multiprocess">
+<span id="acutils-multiprocess-module"></span><h2>acutils.multiprocess module<a class="headerlink" href="#module-acutils.multiprocess" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.multiprocess.distribute">
+<span class="sig-prename descclassname"><span class="pre">acutils.multiprocess.</span></span><span class="sig-name descname"><span class="pre">distribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">srcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_cpus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">871</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/multiprocess.html#distribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.multiprocess.distribute" title="Link to this definition"></a></dt>
+<dd><p>Distribute files to process and split them between allowed CPUs.
+The distribution is returned as 2 lists of lists of src or dstdir.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>srcs</strong> (<em>(</em><em>array/list like</em><em> of </em><em>str</em><em>)</em>) – Source files.</p></li>
+<li><p><strong>dstdirs</strong> (<em>(</em><em>array/list like</em><em> of </em><em>str</em><em>)</em>) – Destination directories.</p></li>
+<li><p><strong>allowed_cpus=1</strong> (<em>(</em><em>int</em><em>)</em>) – Maximum amount of CPUs used to compute.</p></li>
+<li><p><strong>seed=871</strong> (<em>(</em><em>int</em><em>)</em>) – Seed used to initialize numpy randomizer.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(list&lt;list&lt;str&gt;&gt;) packed_srcs</em> – Source files absolute paths per process.</p></li>
+<li><p><em>(list&lt;list&lt;str&gt;&gt;) packed_dstdirs</em> – Destination directories absolute paths per process.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.multiprocess.run_processes_on_multiple_files">
+<span class="sig-prename descclassname"><span class="pre">acutils.multiprocess.</span></span><span class="sig-name descname"><span class="pre">run_processes_on_multiple_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">packed_srcs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">packed_dstdirs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowed_cpus</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/multiprocess.html#run_processes_on_multiple_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.multiprocess.run_processes_on_multiple_files" title="Link to this definition"></a></dt>
+<dd><p>Run processes on the maximum amount of allowed CPUs to apply “func” function
+to each source file.
+“func” needs “src” and “dstdir” params (in acutils, those are prefixed with
+“tmnt”).
+<a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs should be addionnal arguments to pass to the “func” function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>packed_srcs</strong> (<em>(</em><em>list&lt;list&lt;str&gt;&gt;</em><em>)</em>) – Source files absolute paths per process.</p></li>
+<li><p><strong>packed_dstdirs</strong> (<em>(</em><em>list&lt;list&lt;str&gt;&gt;</em><em>)</em>) – Destination directories absolute paths per process.</p></li>
+<li><p><strong>func</strong> (<em>(</em><em>function</em><em>)</em>) – Treatment that will be applied on each source file it needs an absolute
+path to the source file “src” and absolute absolute path to destination
+files directory “dstdir” in acutils, any function prefixed with “tmnt”
+is usable.</p></li>
+<li><p><strong>allowed_cpus=1</strong> (<em>(</em><em>int</em><em>)</em>) – Maximum amount of CPUs used to compute.</p></li>
+<li><p><strong>**kwargs</strong> (<em>Arguments to pass to the &quot;func&quot; function.</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-acutils.pathology">
+<span id="acutils-pathology-module"></span><h2>acutils.pathology module<a class="headerlink" href="#module-acutils.pathology" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.browse_segments">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">browse_segments</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slide</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_area</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_harmonize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#browse_segments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.browse_segments" title="Link to this definition"></a></dt>
+<dd><p>Find slices inside the preview and load it from de slide.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>slide</strong> (<em>(</em><em>openslide.OpenSlide</em><em>)</em>) – The slide.</p></li>
+<li><p><strong>bw</strong> (<em>(</em><em>numpy.array</em><em> of </em><em>cupy.array</em><em> of </em><em>bool</em><em>)</em>) – Binary image from the preview.</p></li>
+<li><p><strong>lvl=0</strong> (<em>(</em><em>int</em><em>)</em>) – level taken.</p></li>
+<li><p><strong>required_area=10000</strong> (<em>(</em><em>int</em><em>)</em>) – Minimum area (pixels) to keep the slice.</p></li>
+<li><p><strong>do_harmonize=False</strong> (<em>(</em><em>bool</em><em>)</em>) – Harmonize slices using harmonize function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Found slices.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(generator of numpy.array of uint8) Segments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.browse_tiles">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">browse_tiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">segment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.35</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#browse_tiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.browse_tiles" title="Link to this definition"></a></dt>
+<dd><p>Regulary crop a segment into multiple tiles of same size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>segment</strong> (<em>(</em><em>numpy.array</em><em> of </em><em>int</em><em>)</em>) – Slice to tile.</p></li>
+<li><p><strong>size=512</strong> (<em>(</em><em>int</em><em>)</em>) – Size of each tile.</p></li>
+<li><p><strong>blank_tol=0.35</strong> (<em>(</em><em>float</em><em>)</em>) – Percentage of white pixels tolerated for a tile.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tiles coordinates (x,y).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(generator of tuple of int) coordinates</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>tiles generator of numpy.array of int): Keeped tiles.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.get_cleaned_binary">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">get_cleaned_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">preview</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp_val</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#get_cleaned_binary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.get_cleaned_binary" title="Link to this definition"></a></dt>
+<dd><p>Split foreground (1) and background (0) using mathematic morphology.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>preview</strong> (<em>(</em><em>numpy.array</em><em> of </em><em>cupy.array</em><em> of </em><em>int</em><em>)</em>) – Fully loaded slide with low resolution.</p></li>
+<li><p><strong>fpval=16</strong> (<em>(</em><em>int</em><em>)</em>) – Value that is used to creates footprints for segmentation.</p></li>
+<li><p><strong>sigma=2</strong> (<em>(</em><em>float</em><em>)</em>) – Value for gaussian filter (applied on the slide before segmentation).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Binary image from the preview.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(numpy.array of cupy.array of bool) bw</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.get_preview">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">get_preview</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">slide</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#get_preview"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.get_preview" title="Link to this definition"></a></dt>
+<dd><p>Read the slide and returns it with low resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>slide</strong> (<em>(</em><em>openslide.OpenSlide</em><em>)</em>) – The slide.</p></li>
+<li><p><strong>lvl=-1</strong> (<em>(</em><em>int</em><em>)</em>) – Level taken.</p></li>
+<li><p><strong>divider=None</strong> (<em>(</em><em>float</em><em>)</em>) – Scale the preview by dividing the slide. The new width and height will be
+the old ones divided by the divider. It is also the size of the area
+used to load the slide, to ensure no memory overload.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Scaled loaded slide.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(numpy.array or cupy.array of int) preview</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.harmonize">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">harmonize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#harmonize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.harmonize" title="Link to this definition"></a></dt>
+<dd><p>Harmonize the image through hed conversion, erase the color and keep
+the stains. Then match the histogram with a reference image.
+You can change the reference image calling update_ref_image function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> (<em>(</em><em>numpy.array</em><em> or </em><em>cupy.array</em><em> of </em><em>int</em><em>)</em>) – RGB image to harmonize.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>[1] A. C. Ruifrok and D. A. Johnston:</dt><dd><p>“Quantification of histochemical staining by color deconvolution.,”
+Analytical and quantitative cytology and histology / the International
+Academy of Cytology [and] American Society of Cytology, vol. 23, no. 4,
+pp. 291-9, Aug. 2001.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.load_slice_preview_and_ext">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">load_slice_preview_and_ext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#load_slice_preview_and_ext"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.load_slice_preview_and_ext" title="Link to this definition"></a></dt>
+<dd><p>Load slide file and extract a preview of it using get_preview function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the slide.</p></li>
+<li><p><strong>lvl</strong> (<em>(</em><em>int</em><em>)</em>) – Slide level taken.</p></li>
+<li><p><strong>divider=None</strong> (<em>(</em><em>float</em><em>)</em>) – Scale the preview by dividing the slide.</p></li>
+<li><p><strong>device=None</strong> (<em>(</em><em>int</em><em>)</em>) – Taken GPU.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(openslide.OpenSlide) slide</em> – The slide.</p></li>
+<li><p><em>(numpy.array of cupy.array of int) preview</em> – Fully loaded slide with low resolution.</p></li>
+<li><p><em>(str) slide_ext</em> – Slide extension.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.mask_rgb">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">mask_rgb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rgb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#mask_rgb"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.mask_rgb" title="Link to this definition"></a></dt>
+<dd><p>Mask rgb image with a binary image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rgb</strong> (<em>(</em><em>numpy.array</em><em> or </em><em>cupy.array</em><em> of </em><em>int</em><em>)</em>) – RGB image.</p></li>
+<li><p><strong>mask</strong> (<em>(</em><em>numpy.array</em><em> or </em><em>cupy.array</em><em> of </em><em>bool</em><em>)</em>) – Binary image.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>RGB image masked with the binary image.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(numpy.array or cupy.array of uint8) masked_rgb</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.tmnt_harmonize">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">tmnt_harmonize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#tmnt_harmonize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.tmnt_harmonize" title="Link to this definition"></a></dt>
+<dd><p>Read a segment, harmonize it calling harmonize function, then save it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the file that will be processed.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the directory that should contain the new file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.tmnt_save_preview_from_slide">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">tmnt_save_preview_from_slide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#tmnt_save_preview_from_slide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.tmnt_save_preview_from_slide" title="Link to this definition"></a></dt>
+<dd><p>Load slide preview and save it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the slide.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the directory where to save the preview.</p></li>
+<li><p><strong>lvl</strong> (<em>(</em><em>int</em><em>)</em>) – Slide level taken.</p></li>
+<li><p><strong>divider=None</strong> (<em>(</em><em>float</em><em>)</em>) – Scale the preview by dividing the slide.</p></li>
+<li><p><strong>ext=&quot;png&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – Saved preview extension.</p></li>
+<li><p><strong>device=None</strong> (<em>(</em><em>int</em><em>)</em>) – Taken GPU.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.tmnt_save_segments_from_slide">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">tmnt_save_segments_from_slide</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvlpreview</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lvlsegment</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fpval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">do_harmonize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#tmnt_save_segments_from_slide"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.tmnt_save_segments_from_slide" title="Link to this definition"></a></dt>
+<dd><p>Find slices inside the slide and save them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the slide.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the directory where to save the preview.</p></li>
+<li><p><strong>lvlpreview</strong> (<em>(</em><em>int</em><em>)</em>) – Slide level taken for the preview.</p></li>
+<li><p><strong>lvlsegment</strong> (<em>(</em><em>int</em><em>)</em>) – Slide level taken for the segment.</p></li>
+<li><p><strong>fpval</strong> (<em>(</em><em>int</em><em>)</em>) – Value that is used to creates footprints for segmentation.</p></li>
+<li><p><strong>sigma</strong> (<em>(</em><em>float</em><em>)</em>) – Value for gaussian filter (applied on the slide before segmentation).</p></li>
+<li><p><strong>do_harmonize=False</strong> (<em>(</em><em>bool</em><em>)</em>) – Harmonize slices using harmonize function.</p></li>
+<li><p><strong>divider=None</strong> (<em>(</em><em>float</em><em>)</em>) – Scale the preview by dividing the slide.</p></li>
+<li><p><strong>ext=&quot;png&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – Saved segments extension.</p></li>
+<li><p><strong>device=None</strong> (<em>(</em><em>int</em><em>)</em>) – Taken GPU.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.tmnt_save_tiles_from_segment">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">tmnt_save_tiles_from_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">512</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blank_tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#tmnt_save_tiles_from_segment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.tmnt_save_tiles_from_segment" title="Link to this definition"></a></dt>
+<dd><p>Find slices inside the slide and save them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the slide.</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the directory where to save the preview.</p></li>
+<li><p><strong>size=512</strong> (<em>(</em><em>int</em><em>)</em>) – Size of each tile.</p></li>
+<li><p><strong>blank_tol=0.35</strong> (<em>(</em><em>float</em><em>)</em>) – Percentage of white pixels tolerated for a tile.</p></li>
+<li><p><strong>ext=&quot;png&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – Saved tiles extension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.pathology.update_ref_image">
+<span class="sig-prename descclassname"><span class="pre">acutils.pathology.</span></span><span class="sig-name descname"><span class="pre">update_ref_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/pathology.html#update_ref_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.pathology.update_ref_image" title="Link to this definition"></a></dt>
+<dd><p>Change reference image using when calling harmonize function.
+If you called <cite>gpu.set_gpu_computation(activate=True)</cite>, calling will load
+the image on the GPU (using cupy instead of numpy).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img_path=None</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the image that will be the reference to harmonize.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-acutils.sheet">
+<span id="acutils-sheet-module"></span><h2>acutils.sheet module<a class="headerlink" href="#module-acutils.sheet" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.sheet.add_suffix_to_cells_from_a_column">
+<span class="sig-prename descclassname"><span class="pre">acutils.sheet.</span></span><span class="sig-name descname"><span class="pre">add_suffix_to_cells_from_a_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suffix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/sheet.html#add_suffix_to_cells_from_a_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.sheet.add_suffix_to_cells_from_a_column" title="Link to this definition"></a></dt>
+<dd><p>Concatenate a string with the values in certain columns of a Pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>(</em><em>pandas.DataFrame</em><em>)</em>) – The DataFrame to modify.</p></li>
+<li><p><strong>suffix</strong> (<em>(</em><em>str</em><em>)</em>) – The string to concatenate with the values in the specified columns.</p></li>
+<li><p><strong>columns</strong> (<em>(</em><em>list</em><em>)</em>) – A list of column names to concatenate with the string.</p></li>
+<li><p><strong>inplace=False</strong> (<em>(</em><em>bool</em><em>)</em>) – If True, the DataFrame will be modified in place, else it is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Modified copy of passed df, if inplace==True returns None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(pandas.DataFrame) df=None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.sheet.delete_clueless_rows">
+<span class="sig-prename descclassname"><span class="pre">acutils.sheet.</span></span><span class="sig-name descname"><span class="pre">delete_clueless_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clueless_words</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inplace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/sheet.html#delete_clueless_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.sheet.delete_clueless_rows" title="Link to this definition"></a></dt>
+<dd><p>Delete rows of a Pandas DataFrame based on the values in clueless_words.
+Delete each row that have any empty cell or any cell that contain a
+clueless_word. If columns argument is specified, only those columns
+will be concerned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>(</em><em>pandas.DataFrame</em><em>)</em>) – The DataFrame to filter.</p></li>
+<li><p><strong>clueless_words=None</strong> (<em>(</em><em>list&lt;str&gt;</em><em>)</em>) – Any cell containing a word of the list is treated as empty.</p></li>
+<li><p><strong>columns=None</strong> (<em>(</em><em>list&lt;str&gt;</em><em>)</em>) – Columns considered for the deletion.</p></li>
+<li><p><strong>inplace=False</strong> (<em>(</em><em>bool</em><em>)</em>) – If True, the DataFrame will be modified in place, else it is returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Filtered copy of passed df, if inplace==True returns None.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(pandas.DataFrame) df=None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.sheet.read_df_from_any_avalaible_extensions">
+<span class="sig-prename descclassname"><span class="pre">acutils.sheet.</span></span><span class="sig-name descname"><span class="pre">read_df_from_any_avalaible_extensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sheetpath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/sheet.html#read_df_from_any_avalaible_extensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.sheet.read_df_from_any_avalaible_extensions" title="Link to this definition"></a></dt>
+<dd><p>Load a Pandas DataFrame from a file.
+Avalaible extensions: csv, txt, xls, xlsx, feather, parquet,
+hdf5, sas7bdat, stata, pickle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sheetpath</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path of the file to load.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The DataFrame loaded from the file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(pandas.DataFrame) df</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>(</strong><strong>ValueError</strong><strong>) </strong><strong>err:</strong> – If the file extension is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-acutils.video">
+<span id="acutils-video-module"></span><h2>acutils.video module<a class="headerlink" href="#module-acutils.video" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.video.browse_frames_for_binary_classification">
+<span class="sig-prename descclassname"><span class="pre">acutils.video.</span></span><span class="sig-name descname"><span class="pre">browse_frames_for_binary_classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_down</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_up</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/video.html#browse_frames_for_binary_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.video.browse_frames_for_binary_classification" title="Link to this definition"></a></dt>
+<dd><p>Browse each frame of a video, from “start” to “end”.
+Skip from bound-extra_down to bound+extra_up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the video</p></li>
+<li><p><strong>bound</strong> (<em>(</em><em>int</em><em>)</em>) – frame number that switch the status from “before” to “after”</p></li>
+<li><p><strong>extra_down</strong> (<em>(</em><em>int</em><em>)</em>) – how many frames to skip before the bound</p></li>
+<li><p><strong>extra_up</strong> (<em>(</em><em>int</em><em>)</em>) – how many frames to skip after the bound</p></li>
+<li><p><strong>start=0</strong> (<em>(</em><em>int</em><em>)</em>) – frame number to start browsing frames</p></li>
+<li><p><strong>end=None</strong> (<em>(</em><em>int</em><em>)</em>) – frame number to end browsing frames (if None, go for the full duration)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>(generator of bool) passed</em> – True from entering inside the skipped range to the end</p></li>
+<li><p><em>(generator of int) count</em> – frame numbers</p></li>
+<li><p><em>(generator of numpy.array of uint8) frame</em> – BGR frames of the video</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.video.tmnt_extract_frames_for_binary_classification">
+<span class="sig-prename descclassname"><span class="pre">acutils.video.</span></span><span class="sig-name descname"><span class="pre">tmnt_extract_frames_for_binary_classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_down</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_up</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'before'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'after'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/video.html#tmnt_extract_frames_for_binary_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.video.tmnt_extract_frames_for_binary_classification" title="Link to this definition"></a></dt>
+<dd><p>Extract frames of a video, from “start” to “end”.
+Skip from bound-extra_down to bound+extra_up.
+Split them into 2 states “before” or “after” the skipped range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the video</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the directory that should contain the frames</p></li>
+<li><p><strong>bound</strong> (<em>(</em><em>int</em><em>)</em>) – frame number that switch the status from “before” to “after”</p></li>
+<li><p><strong>extra_down</strong> (<em>(</em><em>int</em><em>)</em>) – how many frames to skip before the bound</p></li>
+<li><p><strong>extra_up</strong> (<em>(</em><em>int</em><em>)</em>) – how many frames to skip after the bound</p></li>
+<li><p><strong>start=0</strong> (<em>(</em><em>int</em><em>)</em>) – frame number to start browsing frames</p></li>
+<li><p><strong>end=None</strong> (<em>(</em><em>int</em><em>)</em>) – frame number to end browsing frames (if None, go for the full duration)</p></li>
+<li><p><strong>fext=&quot;png&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – frame extension</p></li>
+<li><p><strong>before_name=&quot;before&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – name of the subdir inside dstdir to save frames before skip</p></li>
+<li><p><strong>after_name=&quot;after&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – name of the subdir inside dstdir to save frames after skip</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="acutils.video.tmnt_extract_sequences_for_binary_classification">
+<span class="sig-prename descclassname"><span class="pre">acutils.video.</span></span><span class="sig-name descname"><span class="pre">tmnt_extract_sequences_for_binary_classification</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dstdir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_down</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_up</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seqlen</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mp4'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">codec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mp4v'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">before_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'before'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">after_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'after'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/acutils/video.html#tmnt_extract_sequences_for_binary_classification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#acutils.video.tmnt_extract_sequences_for_binary_classification" title="Link to this definition"></a></dt>
+<dd><p>Extract sequences of a video, from “start” to “end”.
+Skip from bound-extra_down to bound+extra_up.
+Split them into 2 states “before” or “after” the skipped range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>(</em><em>str</em><em>)</em>) – absolute path to the video</p></li>
+<li><p><strong>dstdir</strong> (<em>(</em><em>str</em><em>)</em>) – Absolute path to the directory that should contain the frames.</p></li>
+<li><p><strong>bound</strong> (<em>(</em><em>int</em><em>)</em>) – Frame number that switch the status from “before” to “after”.</p></li>
+<li><p><strong>extra_down</strong> (<em>(</em><em>int</em><em>)</em>) – How many frames to skip before the bound.</p></li>
+<li><p><strong>extra_up</strong> (<em>(</em><em>int</em><em>)</em>) – How many frames to skip after the bound.</p></li>
+<li><p><strong>seqlen=6</strong> (<em>(</em><em>int</em><em>)</em>) – Amount of frames per sequence.</p></li>
+<li><p><strong>start=0</strong> (<em>(</em><em>int</em><em>)</em>) – Frame number to start browsing frames.</p></li>
+<li><p><strong>end=None</strong> (<em>(</em><em>int</em><em>)</em>) – Frame number to end browsing frames (if None, go for the full duration).</p></li>
+<li><p><strong>sext=&quot;mp4&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – Sequence extension.</p></li>
+<li><p><strong>codec=&quot;mp4v&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – Sequence codec, used for: fourcc = cv2.VideoWriter_fourcc(<a href="#id11"><span class="problematic" id="id12">*</span></a>codec).</p></li>
+<li><p><strong>fps=12</strong> (<em>(</em><em>int</em><em>)</em>) – saved Sequence frames per second.</p></li>
+<li><p><strong>before_name=&quot;before&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – Name of the subdir inside dstdir to save frames before skip.</p></li>
+<li><p><strong>after_name=&quot;after&quot;</strong> (<em>(</em><em>str</em><em>)</em>) – Name of the subdir inside dstdir to save frames after skip.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-acutils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-acutils" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="acutils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Acuzle.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
